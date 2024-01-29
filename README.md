@@ -1,6 +1,7 @@
 # Projet Quai Antique
 
-Bienvenue dans le projet Quai Antique. Ce projet vise à créer une application web pour le restaurant Quai Antique, offrant une expérience gastronomique unique.
+Bienvenue dans le projet Quai Antique. Ce projet est réalisé dans le cadre d'un ecf de développement web
+Le restaurant quai antique est un restaurant fictif
 
 ## Configuration de l'environnement
 
