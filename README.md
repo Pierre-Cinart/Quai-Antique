@@ -40,7 +40,7 @@ Le restaurant quai antique est un restaurant fictif
 4. Naviguez vers le dossier `front` pour installer les dépendances Vue.js , exécutez :
 
 ```bash
-`npm install` 
+npm install 
  ```
  
 ## Utilisation du projet
