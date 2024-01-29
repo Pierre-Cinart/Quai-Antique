@@ -82,7 +82,7 @@ Si vous souhaitez contribuer au projet, suivez ces étapes :
 
 Si vous rencontrez des problèmes ou si vous avez des questions, veuillez ouvrir un ticket dans la section des problèmes du projet.
 
----
+ ---
 
 
 
