@@ -65,7 +65,7 @@ npm install
 
    Exemple de fichier `.env` :
    ```env
-   VUE_APP_API_URL=http://localhost:8000/api
+   VUE_APP_API_URL=http://localhost:8000/back/api
    ```
 
 ## Contribuer
