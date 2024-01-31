@@ -1,30 +1,22 @@
+<!-- MaVue.vue -->
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <NavBar />
+    <!-- Autre contenu de votre vue -->
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import NavBar from '@/components/NavBar.vue'; // Assurez-vous de spécifier le chemin correct
 
-nav {
-  padding: 30px;
+export default {
+  components: {
+    NavBar
+  },
+  // Autres options de la vue
 }
+</script>
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
+<style scoped>
+  /* Styles spécifiques à cette vue */
 </style>
