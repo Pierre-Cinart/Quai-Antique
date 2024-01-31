@@ -25,23 +25,28 @@ Le restaurant quai antique est un restaurant fictif
 ### Frontend (Vue.js)
 
 1. Assurez-vous d'avoir [Node.js](https://nodejs.org/) installé sur votre machine.
-2. Installez Vue.js en exécutant la commande suivante dans votre terminal :
+2. Rendez vous dans le dossier front , installez Vue.js en exécutant la commande suivante dans votre terminal :
 
     ```bash
     npm install -g vue
     ```
 
-3. Installez Vue CLI en exécutant la commande suivante :
+3. Puis installez Vue CLI en exécutant la commande suivante :
 
     ```bash
     npm install -g @vue/cli
     ```
 
-4. Naviguez vers le dossier `front` pour installer les dépendances Vue.js , exécutez :
+4. Ensuite installez Bootstrap en exécutant la commande suivante :
+    ```bash
+    npm install bootstrap
+    ```
+    
+5. Enfin installer les dépendances Vue.js , exécutez :
 
-```bash
-npm install 
- ```
+    ```bash
+    npm install 
+    ```
  
 ## Utilisation du projet
 
@@ -68,21 +73,9 @@ npm install
    VUE_APP_API_URL=http://localhost:8000/back/api
    ```
 
-## Contribuer
 
-Si vous souhaitez contribuer au projet, suivez ces étapes :
 
-1. Fork du projet.
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/nom-de-la-fonctionnalite`).
-3. Effectuez vos modifications.
-4. Commit et poussez vos modifications (`git commit -m "Ajout d'une nouvelle fonctionnalité"`).
-5. Soumettez une demande de tirage (Pull Request).
 
-## Problèmes et questions
-
-Si vous rencontrez des problèmes ou si vous avez des questions, veuillez ouvrir un ticket dans la section des problèmes du projet.
-
- ---
 
 
 
