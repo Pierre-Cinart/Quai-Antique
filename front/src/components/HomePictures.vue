@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div >
     <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
       <div class="carousel-inner">
         <div v-for="(image, index) in images" :key="index" :class="{ 'carousel-item': true, 'active': index === 0 }">
@@ -41,12 +41,24 @@ export default {
 </script>
 
 <style>
+
   #imageCarousel {
     padding: 10px;
+    
     max-width: 500px;
-    margin: 0 auto;
+    margin: auto;
+    margin-bottom: 15px;
   }
-
+  .carousel-control-prev{
+    
+    position: absolute;
+    left:-45px;
+  }
+  .carousel-control-next{
+    
+    position: absolute;
+    right:-45px;
+  }
   .carousel-inner {
     .carousel-item {
       display: none;

@@ -12,7 +12,9 @@
         </div>
         <button type="submit" class="btn btn-success">Se connecter</button>
       </form>
+      <br>
       <div class="sep"></div>
+      <br>
       <h2>Inscription</h2>
       <form @submit.prevent="register">
         <div class="mb-3">
@@ -73,8 +75,12 @@
   <style scoped>
   /* LoginSignupForm */
   .login-signup-form {
+    background-color: #ddae48c2; 
+    border: solid 2px #523e15;
+    border-radius: 5px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 15px;
+    margin-bottom:15px;
     width: 80%;
     max-width: 500px;
   }

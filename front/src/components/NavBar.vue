@@ -41,6 +41,7 @@ header {
   font-size: 25px;
   font-family: 'Dancing Script', cursive;
   user-select: none;
+  border: solid 2px #523e15;
 }
 
 .navBar {

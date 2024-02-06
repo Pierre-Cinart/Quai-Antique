@@ -4,8 +4,18 @@
     margin: 0;
     padding: 0;
 }
-body {
+body {min-height: 100vh;}
+#app {
+    position: relative;
     font-family: 'Dancing Script', cursive;
+    width: 100%;
+    max-width: 1920px;
+    min-width: 300px;
+    margin: auto;
+    min-height: 100vh;
+    background-image: url('/images/bg_home.jpg');
+    background-size: cover;
+
 }
 /* div de séparation */
 .sep {
@@ -14,4 +24,9 @@ body {
     width: 100%;
     border-bottom: 2px solid rgb(40, 105, 34);
     box-shadow: 0px 0px 8px 5px rgba(40, 105, 34,0.88);
+  }
+  .home_page{
+    
+    padding-top: 5px;
+    margin: auto;
   }

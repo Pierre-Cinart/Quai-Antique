@@ -1,22 +1,30 @@
 <template>
-  <div>
-    <NavBar />
-    <HomePictures />
-    <router-view></router-view>
-  </div>
+  
+    <div class="main">
+      <NavBar />
+      <router-view></router-view>
+      <FooterBar />
+    </div>
+  
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue';
+import FooterBar from '@/components/FooterBar.vue';
 
 
 export default {
   components: {
-    NavBar , 
+    NavBar , FooterBar
   },
 }
 </script>
 
 <style scoped>
-  /* Ajoutez des styles si nécessaire */
+  .main{
+    width: 100%;
+    
+    min-height: 100vh;
+  }
+ 
 </style>
