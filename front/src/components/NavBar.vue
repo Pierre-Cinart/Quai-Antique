@@ -4,7 +4,7 @@
       <div class="container-fluid navBar">
         <!-- Logo à gauche -->
         <div>
-          <router-link to="/home" class="navbar-brand">
+          <router-link to="/" class="navbar-brand">
             <img src="@/assets/logo.png" alt="logo restaurant" style = "border-radius: 50%;">
           </router-link>
         </div>
@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <router-link to="/home" class="nav-link active">Accueil</router-link>
+              <router-link to="/" class="nav-link active">Accueil</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/carte-menus" class="nav-link" style="font-weight: bolder;">Consulter La Carte</router-link>
@@ -27,7 +27,7 @@
               <router-link to="/reservation" class="nav-link" style="font-weight: bolder;">Réserver Une Table</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/connexion" class="nav-link">Se connecter</router-link>
+              <router-link to="/authentification" class="nav-link">Se connecter</router-link>
             </li>
           </ul>
         </div>

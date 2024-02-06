@@ -1,22 +1,22 @@
-<!-- MaVue.vue -->
 <template>
   <div>
     <NavBar />
-    <!-- Autre contenu de votre vue -->
+    <HomePictures />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import NavBar from '@/components/NavBar.vue'; // Assurez-vous de spécifier le chemin correct
+import NavBar from '@/components/NavBar.vue';
+
 
 export default {
   components: {
-    NavBar
+    NavBar , 
   },
-  // Autres options de la vue
 }
 </script>
 
 <style scoped>
-  /* Styles spécifiques à cette vue */
+  /* Ajoutez des styles si nécessaire */
 </style>
