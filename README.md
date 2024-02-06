@@ -9,7 +9,7 @@ Le restaurant quai antique est un restaurant fictif
 
 1. Assurez-vous d'avoir [Composer](https://getcomposer.org/) installé sur votre machine.
 2. Naviguez vers le dossier `back` et exécutez `composer install` pour installer les dépendances PHP.
-3. Copiez le fichier `.env.example` et renommez-le en `.env`. Mettez à jour les variables d'environnement appropriées telles que `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, etc.
+3. Créez un fichier à la racine du projet  `.env.` . Mettez à jour les variables d'environnement appropriées telles que `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, etc.
 
    Exemple de fichier `.env` :
    ```env
@@ -41,13 +41,12 @@ Le restaurant quai antique est un restaurant fictif
     ```bash
     npm install bootstrap
     ```
-    
 5. Enfin installer les dépendances Vue.js , exécutez :
 
     ```bash
     npm install 
     ```
- 
+
 ## Utilisation du projet
 
 1. Assurez-vous que le backend est en cours d'exécution avec les configurations correctes.
@@ -70,7 +69,7 @@ Le restaurant quai antique est un restaurant fictif
 
    Exemple de fichier `.env` :
    ```env
-   VUE_APP_API_URL=http://localhost:8000/back/api
+   VUE_APP_API_URL=http://localhost/back/api
    ```
 
 
