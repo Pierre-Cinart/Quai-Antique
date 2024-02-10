@@ -4,7 +4,6 @@
     margin: 0;
     padding: 0;
 }
-body {min-height: 100vh;}
 #app {
     position: relative;
     font-family: 'Dancing Script', cursive;
@@ -15,7 +14,7 @@ body {min-height: 100vh;}
     min-height: 100vh;
     background-image: url('/images/bg_home.jpg');
     background-size: cover;
-
+  
 }
 /* div de séparation */
 .sep {

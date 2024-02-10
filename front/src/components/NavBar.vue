@@ -73,6 +73,6 @@ img {
 
 /* Style personnalisé pour le fond de la navbar */
 .bg-custom {
-  background-color: #ddae48; 
+  background-color: #ddae48b9; 
 }
 </style>

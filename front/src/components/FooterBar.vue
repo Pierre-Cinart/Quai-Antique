@@ -49,7 +49,7 @@ export default {
   width: 33%;
 }
 
-.reserv:hover {
+.reserv .nav-link:hover{
   color: blue;
 }
 
@@ -105,9 +105,9 @@ footer {
   .contact ul li {
     list-style: none;
   }
- 
-  .reserv:hover {
+  .reserv .nav-link:hover{
   color: white;
 }
+
 }
 </style>
