@@ -5,14 +5,14 @@
         <li v-if="week">
           <span class="day">Du Lundi au Vendredi : </span>
           <span>
-            de {{ formatTime(week.morning_start) }} à {{ formatTime(week.morning_end) }} 
+            de {{ formatTime(week.morning_start) }} à {{ formatTime(week.morning_end) }} <br>
             et de {{ formatTime(week.after_start) }} à {{ formatTime(week.after_end) }}
           </span>
         </li>
         <li v-if="saturday">
           <span class="day">Le Samedi : </span>
           <span>
-            de {{ formatTime(saturday.morning_start) }} à {{ formatTime(saturday.morning_end) }} 
+            de {{ formatTime(saturday.morning_start) }} à {{ formatTime(saturday.morning_end) }} <br>
             et de {{ formatTime(saturday.after_start) }} à {{ formatTime(saturday.after_end) }}
           </span>
         </li>
@@ -54,7 +54,7 @@
         if (!time) return ''; // Si l'heure n'est pas définie, retourner une chaîne vide
         const hour = Math.floor(time / 100);
         const minute = time % 100;
-        return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        return `${hour.toString().padStart(2, '0')}h${minute.toString().padStart(2, '0')}`;
       }
     }
   };
