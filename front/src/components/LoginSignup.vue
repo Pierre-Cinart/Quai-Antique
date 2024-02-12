@@ -80,7 +80,6 @@
     border-radius: 5px;
     margin: auto;
     margin-top: 15px;
-    margin-bottom:15px;
     width: 80%;
     max-width: 500px;
   }

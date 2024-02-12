@@ -1,21 +1,21 @@
 <template>
   <header>
     <nav class="navbar navbar-expand-lg bg-custom">
-      <div class="container-fluid navBar">
+      <div class="container-fluid">
         <!-- Logo à gauche -->
         <div>
           <router-link to="/" class="navbar-brand">
-            <img src="@/assets/logo.png" alt="logo restaurant" style = "border-radius: 50%;">
+            <img src="@/assets/logo.png" alt="logo restaurant" style="border-radius: 50%;">
           </router-link>
         </div>
 
         <!-- Bouton de bascule à droite -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" @click="toggleNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <!-- Liens de navigation à droite -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div :class="{'show': navbarOpen}" class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
               <router-link to="/" class="nav-link active">Accueil</router-link>
@@ -35,6 +35,21 @@
     </nav>
   </header>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      navbarOpen: false
+    };
+  },
+  methods: {
+    toggleNavbar() {
+      this.navbarOpen = !this.navbarOpen;
+    }
+  }
+}
+</script>
 
 <style scoped>
 header {

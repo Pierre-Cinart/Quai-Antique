@@ -7,8 +7,15 @@
         <div class="col-md-12 text-center mb-3">
           <!-- Titre du calendrier -->
           <h2>Selectionnez une date de reservation :</h2>
-          <!-- Affichage de la date sélectionnée -->
-          <span class="selected-date">{{ formattedSelectedDate }}</span>
+             <!-- Section de navigation pour changer de mois -->
+          <div class="current-date">
+      <!-- Bouton pour aller au mois précédent -->
+      <button @click="goToPreviousMonth" :disabled="isPreviousMonthDisabled"><i class="fas fa-chevron-left"></i></button>
+      <!-- Affichage du mois en cours -->
+      <span>{{ currentMonth }}</span>
+      <!-- Bouton pour aller au mois suivant -->
+      <button @click="goToNextMonth" :disabled="isNextMonthDisabled"><i class="fas fa-chevron-right"></i></button>
+    </div>
         </div>
       </div>
       <!-- Calendrier -->
@@ -36,15 +43,9 @@
         </div>
       </div>
     </div>
-    <!-- Section de navigation pour changer de mois -->
-    <div class="current-date">
-      <!-- Bouton pour aller au mois précédent -->
-      <button @click="goToPreviousMonth" :disabled="isPreviousMonthDisabled"><i class="fas fa-chevron-left"></i></button>
-      <!-- Affichage du mois en cours -->
-      <span>{{ currentMonth }}</span>
-      <!-- Bouton pour aller au mois suivant -->
-      <button @click="goToNextMonth" :disabled="isNextMonthDisabled"><i class="fas fa-chevron-right"></i></button>
-    </div>
+ 
+   <!-- Affichage de la date sélectionnée -->
+    <span class="selected-date">{{ formattedSelectedDate }}</span>
   </section>
 </template>
 

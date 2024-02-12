@@ -3,7 +3,7 @@
     <div class="main">
       <NavBar />
       <router-view></router-view>
-      <FooterBar />
+     <FooterBar /> 
     </div>
   
 </template>
@@ -15,7 +15,8 @@ import FooterBar from '@/components/FooterBar.vue';
 
 export default {
   components: {
-    NavBar , FooterBar ,
+    NavBar , 
+    FooterBar ,
   },
 }
 </script>
