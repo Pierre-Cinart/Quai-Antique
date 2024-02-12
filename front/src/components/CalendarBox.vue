@@ -3,12 +3,8 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-md-12 text-center mb-3">
-          <h2>Calendrier</h2>
-          <div class="current-date">
-            <button @click="goToPreviousMonth" :disabled="isPreviousMonthDisabled"><i class="fas fa-chevron-left"></i></button>
-            <span>{{ currentMonth }}</span>
-            <button @click="goToNextMonth"><i class="fas fa-chevron-right"></i></button>
-          </div>
+          <h2>Selectionnez une date de reservation :</h2>
+          <span class="selected-date" v-if="selectedDate">{{ formattedSelectedDate }}</span>
         </div>
       </div>
       <div class="row">
@@ -22,7 +18,7 @@
               </thead>
               <tbody>
                 <tr v-for="(week, index) in weeks" :key="index">
-                  <td v-for="date in week" :key="date.day" @click="selectDate(date)" :class="{ 'disabled': isDateDisabled(date) }">
+                  <td v-for="date in week" :key="date.day" @click="selectDate(date)" :class="{ 'disabled': isDateDisabled(date), 'selected': isDateSelected(date) }">
                     <span v-if="date.day !== ''">{{ date.day }}</span>
                   </td>
                 </tr>
@@ -32,7 +28,11 @@
         </div>
       </div>
     </div>
-    <span v-if="selectedDate">{{ formattedSelectedDate }}</span>
+    <div class="current-date">
+      <button @click="goToPreviousMonth" :disabled="isPreviousMonthDisabled"><i class="fas fa-chevron-left"></i></button>
+      <span>{{ currentMonth }}</span>
+      <button @click="goToNextMonth" :disabled="isNextMonthDisabled"><i class="fas fa-chevron-right"></i></button>
+    </div>
   </section>
 </template>
 
@@ -57,6 +57,12 @@ export default {
     isPreviousMonthDisabled() {
       const today = new Date();
       return this.currentDate.getFullYear() === today.getFullYear() && this.currentDate.getMonth() === today.getMonth();
+    },
+    isNextMonthDisabled() {
+      const sixMonthsLater = new Date();
+      sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
+      const nextMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
+      return nextMonth > sixMonthsLater;
     }
   },
   mounted() {
@@ -97,26 +103,31 @@ export default {
     isDateDisabled(date) {
       return date.date && date.date < new Date().setHours(0, 0, 0, 0);
     },
+    isDateSelected(date) {
+      return date.date && this.selectedDate && date.date.toDateString() === this.selectedDate.toDateString();
+    },
     goToPreviousMonth() {
       const previousMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
       this.updateCalendar(previousMonth);
     },
     goToNextMonth() {
       const nextMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
-      this.updateCalendar(nextMonth);
+      const sixMonthsLater = new Date();
+      sixMonthsLater.setMonth(sixMonthsLater.getMonth() + 6);
+      if (nextMonth <= sixMonthsLater) {
+        this.updateCalendar(nextMonth);
+      }
     }
   }
 };
 </script>
-
-
-
 
 <style scoped>
 .disabled {
   pointer-events: none;
   color: #ccc;
 }
+
 .calendar-box {
   box-sizing: border-box;
   margin: 10px;
@@ -132,6 +143,7 @@ export default {
   display: flex;
   width:75%;
   margin: auto;
+  margin-top: 20px;
   justify-content: space-between;
   border-radius: 5px;
   font-weight: bold;
@@ -180,10 +192,19 @@ export default {
   padding: 15px;
 }
 
-#calendar td span:hover {
+#calendar td.selected span {
   background-color: rgb(40, 105, 34);
   border-radius: 5px;
   border: solid 1px white;
   color: #ddae48b9;
+}
+
+.selected-date{
+  display: block;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  width: 50%;
+  margin: auto;
 }
 </style>
