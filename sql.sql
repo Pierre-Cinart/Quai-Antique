@@ -59,3 +59,22 @@ CREATE TABLE IF NOT EXISTS logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+--Création de la table des horraires
+CREATE TABLE open (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    day VARCHAR(20),
+    morning_start INT,
+    morning_end INT,
+    after_start INT,
+    after_end INT
+);
+
+-----------------------------------------------------------------------------------------------------------------
+--implementation d exemples
+-- creation des horraires
+INSERT INTO open (day, morning_start, morning_end, after_start, after_end)
+VALUES 
+    ('week', 1130, 1500, 1900, 2300),
+    ('saturday', 1130, 1600, 1900, 0),
+    ('sunday', 1130, 1500, NULL, NULL);
