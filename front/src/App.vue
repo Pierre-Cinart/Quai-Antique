@@ -1,5 +1,4 @@
 <template>
-  
     <div class="main">
       <NavBar />
       <router-view></router-view>
@@ -15,7 +14,7 @@ import FooterBar from '@/components/FooterBar.vue';
 
 export default {
   components: {
-    NavBar , 
+    NavBar ,  
     FooterBar ,
   },
 }
@@ -24,7 +23,6 @@ export default {
 <style scoped>
   .main{
     width: 100%;
-    
     min-height: 100vh;
   }
  

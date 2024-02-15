@@ -1,11 +1,9 @@
 <template>
     <div class="home_page">
+    <TitleBox/>
 
-      <div class = "home_page_title">
-        <h1>Bienvenue au restaurant Quai Antique</h1>
-        <p>Découvrez les délices de la Savoie </p>
-      </div>
-
+      
+      
       <div class = "home_pictures">
         <HomePictures />
       </div>
@@ -20,11 +18,13 @@
   </template>
   
   <script>
+  import TitleBox from '@/components/TitleBox.vue'
   import HomePictures from '@/components/HomePictures.vue';
   
   export default {
     components: {
       HomePictures,
+      TitleBox
     },
   };
   </script>

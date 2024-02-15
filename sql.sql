@@ -34,10 +34,12 @@ CREATE TABLE IF NOT EXISTS dishes (
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
     category_id INT,
+    picture VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
+
 
 -- Création de la table des réservations
 CREATE TABLE IF NOT EXISTS reservations (
@@ -78,3 +80,18 @@ VALUES
     ('week', 1130, 1500, 1900, 2300),
     ('saturday', 1130, 1600, 1900, 0),
     ('sunday', 1130, 1500, NULL, NULL);
+-- création des catégories d articles
+INSERT INTO categories (title) VALUES 
+    ('Starter'),
+    ('Dish'),
+    ('Dessert'),
+    ('Drink');
+-- creation d une liste de boissons
+INSERT INTO dishes (title, description, price, category_id, picture) VALUES 
+    ('Eau', 'Eau fraîche et pure.', 1.50, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
+    ('Coca-Cola', 'Boisson cola classique.', 2.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
+    ('Jus d''orange', 'Jus d''orange fraîchement pressé.', 2.50, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
+    ('Bière', 'Bière fraîche et rafraîchissante.', 3.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
+    ('Vin', 'Sélection fine de vins rouges et blancs.', 5.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
+    ('Café', 'Café noir et riche en saveur.', 2.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL);
+-- création d une liste d entrées
