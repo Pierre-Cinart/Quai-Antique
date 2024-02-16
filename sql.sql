@@ -1,5 +1,5 @@
 -- Création de la table des utilisateurs
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE  users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Création de la table des informations des clients
-CREATE TABLE IF NOT EXISTS customer_info (
+CREATE TABLE  customer_info (
     customer_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     phone_number VARCHAR(20),
@@ -22,13 +22,13 @@ CREATE TABLE IF NOT EXISTS customer_info (
 );
 
 -- Création de la table des catégories (boisson, entrée, plat, dessert)
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE  categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(50) NOT NULL
 );
 
 -- Création de la table des plats
-CREATE TABLE IF NOT EXISTS dishes (
+CREATE TABLE  dishes (
     dish_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS dishes (
 
 
 -- Création de la table des réservations
-CREATE TABLE IF NOT EXISTS reservations (
+CREATE TABLE  reservations (
     reservation_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     number_of_guests INT NOT NULL,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS reservations (
 );
 
 -- Création de la table des logs
-CREATE TABLE IF NOT EXISTS logs (
+CREATE TABLE  logs (
     log_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     action_description TEXT NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS logs (
 );
 
 --Création de la table des horraires
-CREATE TABLE open (
+CREATE TABLE  open (
     id INT AUTO_INCREMENT PRIMARY KEY,
     day VARCHAR(20),
     morning_start INT,
@@ -72,8 +72,20 @@ CREATE TABLE open (
     after_end INT
 );
 
+-- Création de la table home_pictures
+CREATE TABLE IF NOT EXISTS home_pictures (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    dish_id INT,
+    FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
+);
+
 -----------------------------------------------------------------------------------------------------------------
 --implementation d exemples
+-- creation de l affichage des images sur la page d accueil 
+INSERT INTO home_pictures (dish_id) VALUES (7);
+INSERT INTO home_pictures (dish_id) VALUES (8);
+INSERT INTO home_pictures (dish_id) VALUES (9);
+
 -- creation des horraires
 INSERT INTO open (day, morning_start, morning_end, after_start, after_end)
 VALUES 
@@ -95,3 +107,8 @@ INSERT INTO dishes (title, description, price, category_id, picture) VALUES
     ('Vin', 'Sélection fine de vins rouges et blancs.', 5.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
     ('Café', 'Café noir et riche en saveur.', 2.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL);
 -- création d une liste d entrées
+-- creation d exemples de plats 
+INSERT INTO dishes (title, description, price, category_id, picture) VALUES 
+    ('Raclette', 'Un plat traditionnel savoyard composé de fromage fondu, de pommes de terre et de charcuterie.', 15.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish1.jpg'),
+    ('Fondue savoyarde', 'Un plat emblématique de la région savoyarde, où le fromage fondu est dégusté avec du pain.', 20.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish2.jpg'),
+    ('Tartiflette', "Un plat savoyard à base de pommes de terre, de reblochon, d'oignons et de lardons.", 18.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish3.jpg');

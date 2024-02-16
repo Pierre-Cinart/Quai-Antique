@@ -7,7 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET");
 
 // Connexion à la base de données
-require_once 'bdd.php'; // Assurez-vous de spécifier le chemin correct vers votre fichier de connexion
+require_once __DIR__ . '\bdd.php';
 
 try {
     // Récupérer les horaires d'ouverture pour les jours de la semaine

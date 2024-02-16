@@ -3,27 +3,18 @@ session_start();
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once '../config/bdd.php';
 
-// Autoriser toutes les origines (à adapter en fonction de votre environnement)
+// Autoriser toutes les origines 
 header('Access-Control-Allow-Origin: *'); 
 // Autoriser les méthodes de requête spécifiées
 header('Access-Control-Allow-Methods: POST, OPTIONS');
 // Autoriser les en-têtes spécifiés
 header('Access-Control-Allow-Headers: Content-Type');
-// Permettre l'envoi des cookies (si nécessaire)
+// Permettre l'envoi des cookies 
 header('Access-Control-Allow-Credentials: true');
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Répondre aux requêtes OPTIONS avec les en-têtes CORS appropriés
-    header('Access-Control-Allow-Origin: *'); 
-    header('Access-Control-Allow-Methods: POST, OPTIONS');
-    header('Access-Control-Allow-Headers: Content-Type');
-    header('Access-Control-Allow-Credentials: true');
-    exit();
-}
 
-
-// Vérifier la méthode de requête
+// Vérifier si le formulaire de connexion est soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer les données du formulaire
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -42,12 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Vérifier le mot de passe
-if (!$user || !password_verify($password, $user['password'])) {
-    http_response_code(401);
-    error_log('Erreur d\'authentification: Identifiants invalides. Email: ' . $email);
-    echo json_encode(['error' => 'Identifiants invalides.']);
-    exit();
-}
+    if (!$user || !password_verify($password, $user['password'])) {
+        http_response_code(401);
+        error_log('Erreur d\'authentification: Identifiants invalides. Email: ' . $email);
+        echo json_encode(['error' => 'Identifiants invalides.']);
+        exit();
+    }
 
     // Stocker l'ID de l'utilisateur en session par exemple
     $_SESSION['user_id'] = $user['user_id'];

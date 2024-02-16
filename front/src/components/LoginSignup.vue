@@ -43,6 +43,7 @@
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
@@ -60,10 +61,21 @@
       };
     },
     methods: {
-      login() {
-        console.log('Tentative de connexion:', this.loginData);
-        // Vous pouvez ajouter des logiques ici pour simuler une action de connexion
-      },
+      login() { 
+        const apiEndpoint = `${process.env.VUE_APP_API_URL}/login.php`;
+  // Envoyer les données de connexion au serveur
+    axios.post(apiEndpoint, this.loginData)
+    .then(response => {
+      // Réponse du serveur en cas de connexion réussie
+      console.log(response.data.message); // Message de succès
+      // Vous pouvez également effectuer d'autres actions après une connexion réussie, comme rediriger l'utilisateur vers une autre page
+    })
+    .catch(error => {
+      // Gestion des erreurs en cas de problème de connexion
+      console.error('Erreur lors de la tentative de connexion:', error.response.data.error); // Message d'erreur renvoyé par le serveur
+    });
+},
+
       register() {
         console.log('Tentative d\'inscription:', this.registerData);
         // Vous pouvez ajouter des logiques ici pour simuler une action d'inscription
