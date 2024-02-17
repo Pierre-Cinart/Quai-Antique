@@ -3,7 +3,7 @@ CREATE TABLE  users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role ENUM('admin', 'client') DEFAULT 'client' NOT NULL,
+    role ENUM('admin', 'client','super admin') DEFAULT 'client' NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -79,6 +79,13 @@ CREATE TABLE IF NOT EXISTS home_pictures (
     FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
 );
 
+--Création de la table de vérification de tentatives de connexion
+CREATE TABLE failed_login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip_address VARCHAR(45) NOT NULL,
+    attempt_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY ip_address_attempt_timestamp (ip_address, attempt_timestamp)
+);
 -----------------------------------------------------------------------------------------------------------------
 --implementation d exemples
 -- creation de l affichage des images sur la page d accueil 

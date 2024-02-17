@@ -21,6 +21,10 @@ Le restaurant quai antique est un restaurant fictif
    ```
 
 4. Exécutez votre fichier SQL pour créer et alimenter la base de données.
+5. Afin d avoir des données utilisateur pour tester les connexions , rendez vous à l adresse '"adresse_de_votre_serveur/back/Exemple/AddUsers.php'.
+Celui ci execute un script inscrivant un super admin , un admin et un client avec le mot de passe hashé
+vous pouvez modifier facilement les informations du fichier avant execution si désiré .
+Ce fichier sert uniquement d exemple il peut ensuite être supprimé
 
 ### Frontend (Vue.js)
 

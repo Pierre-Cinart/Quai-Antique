@@ -1,52 +1,66 @@
 <?php
-session_start();
-require_once __DIR__ . '/../../vendor/autoload.php';
-require_once '../config/bdd.php';
+// Autoriser l'accès depuis n'importe quelle origine
+header("Access-Control-Allow-Origin: *");
 
-// Autoriser toutes les origines 
-header('Access-Control-Allow-Origin: *'); 
-// Autoriser les méthodes de requête spécifiées
-header('Access-Control-Allow-Methods: POST, OPTIONS');
-// Autoriser les en-têtes spécifiés
-header('Access-Control-Allow-Headers: Content-Type');
-// Permettre l'envoi des cookies 
-header('Access-Control-Allow-Credentials: true');
+// Autoriser les en-têtes et méthodes spécifiques
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-
-
-// Vérifier si le formulaire de connexion est soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupérer les données du formulaire
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $password = $_POST['password'];
-
-    // Validation des données
-    if (!$email || !$password) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Tous les champs sont obligatoires.']);
-        exit();
-    }
-
-    // Récupérer l'utilisateur depuis la base de données avec une requête préparée
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    // Vérifier le mot de passe
-    if (!$user || !password_verify($password, $user['password'])) {
-        http_response_code(401);
-        error_log('Erreur d\'authentification: Identifiants invalides. Email: ' . $email);
-        echo json_encode(['error' => 'Identifiants invalides.']);
-        exit();
-    }
-
-    // Stocker l'ID de l'utilisateur en session par exemple
-    $_SESSION['user_id'] = $user['user_id'];
-
+// Vérifier la méthode de la requête
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    // Répondre immédiatement aux requêtes OPTIONS préalables
     http_response_code(200);
-    echo json_encode(['message' => 'Connexion réussie.']);
-} else {
-    http_response_code(405); // Méthode non autorisée
-    echo json_encode(['error' => 'Méthode non autorisée.']);
+    exit();
 }
+
+// Vérifier si la méthode de la requête est POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Inclure le fichier bdd.php pour établir une connexion à la base de données
+    require_once 'bdd.php';
+    include_once 'login_attemps.php';
+    // Récupérer les données envoyées depuis le formulaire
+    $data = json_decode(file_get_contents("php://input"));
+
+    // Récupérer l'email et le mot de passe
+    $email = $data->email;
+    $password = $data->password;
+
+    ///--------------- mettre un exit si le nombre de requete est supérieur à 5 ----- login-attemps
+
+    //  requête pour récupérer l'utilisateur avec l email
+    $query = "SELECT * FROM users WHERE email = :email";
+    $statement = $pdo->prepare($query);
+    $statement->bindParam(':email', $email);
+    $statement->execute();
+    $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+    // Vérifier si l'utilisateur existe et si le mot de passe correspond
+    if ($user && password_verify($password, $user['password'])) {
+        // Authentification réussie
+        //------------- delete les tentatives ----- login-attemps
+
+        $response = [
+            
+            "message" => "Connexion réussie ". $user['role'] . " " . $user['first_name'] . " " . $user['last_name'],
+            
+        ];
+    } else {
+        // Authentification échouée
+        // ------------incrementer les tentatives ----- login-attemps
+        $response = [
+            
+            "message" => "Identifiants invalides"
+        ];
+    }
+
+    // Envoyer la réponse au format JSON
+    echo json_encode($response);
+} else {
+    // Méthode de requête non autorisée
+    http_response_code(405);
+    echo json_encode(["error" => "Méthode non autorisée"]);
+    exit();
+}
+
+
 ?>
