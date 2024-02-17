@@ -16,7 +16,11 @@
         </div>
         <!-- Affichage des entrées -->
         <div v-show="showAll || selectedMenu === 'starters'" class="starters">
-          <div v-for="(starter, index) in paginatedStarters" :key="index" class="menu-item" @mouseenter.stop="showDescription(starter)" @mouseleave.stop="hideDescription(starter)" @click.stop="toggleDescription(starter)">
+
+          <div v-for="(starter, index) in paginatedStarters" :key="index" class="menu-item" 
+          @mouseenter.stop="showDescription(starter)" @mouseleave.stop="hideDescription(starter)" 
+          @touchstart.stop="toggleDescription(starter)" @click.stop="toggleDescription(starter)">
+
             <img :src="'/images/starters/' + starter.picture" :alt="starter.title" >
             <div class="menu-info">
               <h4>{{ starter.title }}</h4>
@@ -34,13 +38,18 @@
 
         <!-- Affichage des plats -->
         <div v-show="showAll || selectedMenu === 'dishes'" class="dishes">
-          <div v-for="(dish, index) in paginatedDishes" :key="index" class="menu-item" @mouseenter.stop="showDescription(dish)" @mouseleave.stop="hideDescription(dish)" @click.stop="toggleDescription(dish)">
+          <div v-for="(dish, index) in paginatedDishes" :key="index" class="menu-item" 
+            @mouseenter.stop="showDescription(dish)" @mouseleave.stop="hideDescription(dish)" 
+            @touchstart.stop="toggleDescription(dish)" @click.stop="toggleDescription(dish)">
+
             <img :src="'/images/dishes/' + dish.picture" :alt="dish.title">
             <div class="menu-info">
               <h4>{{ dish.title }}</h4>
               <p>{{ dish.price }} €</p>
             </div>
-            <p class="description" v-if="dish.showDescription">{{ dish.description }}</p>
+            <p class="description" v-if="dish.showDescription"
+            @click.stop="toggleDescription(dish)">
+            {{ dish.description }}</p>
           </div>
           <!-- Pagination pour les plats -->
           <div v-show="dishes.length > itemsPerPage" class="pagination">
@@ -52,7 +61,10 @@
 
         <!-- Affichage des desserts -->
         <div v-show="showAll || selectedMenu === 'desserts'" class="desserts">
-          <div v-for="(dessert, index) in paginatedDesserts" :key="index" class="menu-item" @mouseenter.stop="showDescription(dessert)" @mouseleave.stop="hideDescription(dessert)" @click.stop="toggleDescription(dessert)">
+          <div v-for="(dessert, index) in paginatedDesserts" :key="index" class="menu-item" 
+            @mouseenter.stop="showDescription(dessert)" @mouseleave.stop="hideDescription(dessert)" 
+            @touchstart.stop="toggleDescription(dessert)" @click.stop="toggleDescription(dessert)">
+
             <img :src="'/images/desserts/' + dessert.picture" :alt="dessert.title">
             <div class="menu-info">
               <h4>{{ dessert.title }}</h4>
@@ -90,7 +102,8 @@ export default {
       currentPageStarters: 0,
       currentPageDishes: 0,
       currentPageDesserts: 0,
-      itemsPerPage: 2
+      itemsPerPage: 2,
+      isSmallScreen: false // Ajout d'une propriété pour vérifier la taille de l'écran
     };
   },
   computed: {
@@ -123,6 +136,14 @@ export default {
     this.fetchStarters();
     this.fetchDishes();
     this.fetchDesserts();
+
+    // Ajout d'un écouteur pour vérifier la taille de l'écran lors du montage du composant
+    window.addEventListener('resize', this.checkScreenSize);
+    this.checkScreenSize(); // Appel initial pour définir la taille de l'écran
+  },
+  unmounted() {
+    // Suppression de l'écouteur lors de la destruction du composant pour éviter les fuites de mémoire
+    window.removeEventListener('resize', this.checkScreenSize);
   },
   methods: {
     fetchStarters() {
@@ -182,13 +203,23 @@ export default {
       this.currentPageDesserts--;
     },
     toggleDescription(item) {
-      item.showDescription = !item.showDescription;
+      // Vérifie si l'écran est inférieur à 800 pixels avant de permettre le toggle
+      if (!this.isSmallScreen) {
+        // Inverse le statut de l'affichage de la description de l'élément
+        item.showDescription = !item.showDescription;
+      }
     },
     showDescription(item) {
+      // Affiche la description de l'élément
       item.showDescription = true;
     },
     hideDescription(item) {
+      // Cache la description de l'élément
       item.showDescription = false;
+    },
+    checkScreenSize() {
+      // Met à jour la propriété isSmallScreen en fonction de la taille de l'écran
+      this.isSmallScreen = window.innerWidth <= 800;
     }
   }
 };
@@ -197,7 +228,7 @@ export default {
 <style scoped>
 /* Styles pour le composant */
 .carte-menu {
-    background-color: aliceblue;
+    background-color: rgba(240, 248, 255, 0.589);
     width: 80%;
     border-radius: 5px;
     border: solid 1px black;
@@ -305,8 +336,7 @@ export default {
   left:0;
   font-size: 20px !important;
 }
-.starters,
-.dishes,
-.desserts {}
+
+
 </style>
 
