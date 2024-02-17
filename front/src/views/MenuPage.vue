@@ -11,15 +11,18 @@
       </div>
 
       <div class="sort-menus">
-
-        <!-- Affichage des boissons -->
-        <div v-show="showAll || selectedMenu === 'drinks'" class="starters">
-          <img src="/images/drinks/drinks.jpg" alt="carte des boissons">
+        <div v-show="showAll || selectedMenu === 'drinks'" class="drinks">
+          <img src='/images/drinks/drinks.jpg' >
         </div>
         <!-- Affichage des entrées -->
         <div v-show="showAll || selectedMenu === 'starters'" class="starters">
-          <div v-for="(starter, index) in paginatedStarters" :key="index">
-            <img :src="'/images/starters/' + starter.picture" :alt="starter.title">
+          <div v-for="(starter, index) in paginatedStarters" :key="index" class="menu-item" @mouseenter.stop="showDescription(starter)" @mouseleave.stop="hideDescription(starter)" @click.stop="toggleDescription(starter)">
+            <img :src="'/images/starters/' + starter.picture" :alt="starter.title" >
+            <div class="menu-info">
+              <h4>{{ starter.title }}</h4>
+              <p>{{ starter.price }} €</p>
+            </div>
+            <p class="description" v-if="starter.showDescription">{{ starter.description }}</p>
           </div>
           <!-- Pagination pour les entrées -->
           <div v-show="starters.length > itemsPerPage" class="pagination">
@@ -28,10 +31,16 @@
             <button @click="nextPageStarters" :disabled="currentPageStarters === totalPagesStarters - 1">Suivant</button>
           </div>
         </div>
+
         <!-- Affichage des plats -->
         <div v-show="showAll || selectedMenu === 'dishes'" class="dishes">
-          <div v-for="(dish, index) in paginatedDishes" :key="index">
+          <div v-for="(dish, index) in paginatedDishes" :key="index" class="menu-item" @mouseenter.stop="showDescription(dish)" @mouseleave.stop="hideDescription(dish)" @click.stop="toggleDescription(dish)">
             <img :src="'/images/dishes/' + dish.picture" :alt="dish.title">
+            <div class="menu-info">
+              <h4>{{ dish.title }}</h4>
+              <p>{{ dish.price }} €</p>
+            </div>
+            <p class="description" v-if="dish.showDescription">{{ dish.description }}</p>
           </div>
           <!-- Pagination pour les plats -->
           <div v-show="dishes.length > itemsPerPage" class="pagination">
@@ -40,11 +49,17 @@
             <button @click="nextPageDishes" :disabled="currentPageDishes === totalPagesDishes - 1">Suivant</button>
           </div>
         </div>
+
         <!-- Affichage des desserts -->
         <div v-show="showAll || selectedMenu === 'desserts'" class="desserts">
-          <template v-for="(dessert, index) in paginatedDesserts" :key="index">
+          <div v-for="(dessert, index) in paginatedDesserts" :key="index" class="menu-item" @mouseenter.stop="showDescription(dessert)" @mouseleave.stop="hideDescription(dessert)" @click.stop="toggleDescription(dessert)">
             <img :src="'/images/desserts/' + dessert.picture" :alt="dessert.title">
-          </template>
+            <div class="menu-info">
+              <h4>{{ dessert.title }}</h4>
+              <p>{{ dessert.price }} €</p>
+            </div>
+            <p class="description" v-if="dessert.showDescription">{{ dessert.description }}</p>
+          </div>
           <!-- Pagination pour les desserts -->
           <div v-show="desserts.length > itemsPerPage" class="pagination">
             <button @click="prevPageDesserts" :disabled="currentPageDesserts === 0">Précédent</button>
@@ -62,20 +77,20 @@ import TitleBox from '@/components/TitleBox.vue';
 import axios from 'axios';
 
 export default {
-  components : {
+  components: {
     TitleBox,
   },
   data() {
     return {
-      selectedMenu: 'all', // Par défaut, afficher tout
-      showAll: true, // Variable pour gérer l'affichage de tous les éléments
+      selectedMenu: 'all',
+      showAll: true,
       starters: [],
-      dishes: [], // Données des plats
-      desserts: [], // Données des desserts
+      dishes: [],
+      desserts: [],
       currentPageStarters: 0,
       currentPageDishes: 0,
       currentPageDesserts: 0,
-      itemsPerPage: 2 // Nombre d'éléments à afficher par page
+      itemsPerPage: 2
     };
   },
   computed: {
@@ -105,13 +120,8 @@ export default {
     }
   },
   mounted() {
-    // Récupérer les données des plats
     this.fetchStarters();
-
-    // Récupérer les données des plats
     this.fetchDishes();
-
-    // Récupérer les données des desserts
     this.fetchDesserts();
   },
   methods: {
@@ -119,7 +129,7 @@ export default {
       const apiEndpoint = `${process.env.VUE_APP_API_URL}/dishes.php`;
       axios.get(apiEndpoint)
         .then(response => {
-          this.starters = response.data.starters; // Assigner les données des entrées aux starters
+          this.starters = response.data.starters;
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des entrées:", error);
@@ -129,7 +139,7 @@ export default {
       const apiEndpoint = `${process.env.VUE_APP_API_URL}/dishes.php`;
       axios.get(apiEndpoint)
         .then(response => {
-          this.dishes = response.data.dishes; // Assigner les données des plats aux dishes
+          this.dishes = response.data.dishes;
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des plats:", error);
@@ -139,50 +149,54 @@ export default {
       const apiEndpoint = `${process.env.VUE_APP_API_URL}/dishes.php`;
       axios.get(apiEndpoint)
         .then(response => {
-          this.desserts = response.data.desserts; // Assigner les données des desserts aux desserts
+          this.desserts = response.data.desserts;
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des desserts:", error);
         });
     },
     filterMenu(menuType) {
-      // Mettre à jour le type de menu sélectionné
       this.selectedMenu = menuType;
       if (menuType === 'all') {
-        // Si "Tout" est sélectionné, afficher tous les éléments
         this.showAll = true;
       } else {
-        // Sinon, n'afficher que les éléments du type sélectionné
         this.showAll = false;
       }
     },
-    // Fonctions pour la pagination des starters
     nextPageStarters() {
       this.currentPageStarters++;
     },
     prevPageStarters() {
       this.currentPageStarters--;
     },
-    // Fonctions pour la pagination des plats
     nextPageDishes() {
       this.currentPageDishes++;
     },
     prevPageDishes() {
       this.currentPageDishes--;
     },
-    // Fonctions pour la pagination des desserts
     nextPageDesserts() {
       this.currentPageDesserts++;
     },
     prevPageDesserts() {
       this.currentPageDesserts--;
+    },
+    toggleDescription(item) {
+      item.showDescription = !item.showDescription;
+    },
+    showDescription(item) {
+      item.showDescription = true;
+    },
+    hideDescription(item) {
+      item.showDescription = false;
     }
   }
 };
 </script>
 
 <style scoped>
-.carte-menu{
+/* Styles pour le composant */
+.carte-menu {
     background-color: aliceblue;
     width: 80%;
     border-radius: 5px;
@@ -190,58 +204,109 @@ export default {
     margin: auto;
     padding: 10px;
 }
-.carte-menu h3{
+
+.carte-menu h3 {
     background-color: rgba(0, 0, 0, 0.212);
     border-radius: 5px;
     border: solid 2px black;
     margin: auto;
     padding: 5px;
 }
-.carte-menu h3:hover{
+
+.carte-menu h3:hover {
     cursor: pointer;
-    background-color:  rgba(22, 160, 56, 0.212);;
+    background-color: rgba(22, 160, 56, 0.212);
 }
-.sort-titles{
+
+.sort-titles {
     user-select: none;
     display: flex;
     justify-content: baseline;
     flex-wrap: wrap;
     margin-bottom: 15px;
 }
-.sort-menus{
+
+.sort-menus {
     width: 80%;
-    min-height :400px;
+    min-height: 400px;
+    margin: auto;
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
 }
-.sort-menus div{
+
+.sort-menus div {
     border-radius: 5px;
-    margin: 5px ;
+    margin: 5px;
     height: auto;
+    position: relative;
 }
+
 .sort-menus div img {
     width: 200px;
     height: auto;
     border: solid 1px black;
     border-radius: 5px;
-    
 }
-.sort-menus div p {
-    padding: 10px;
-    margin: 0;
-    background-color: #f1f1f1;
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.pagination button {
-  margin: 0 5px;
-}
-.starters,.dishes,.desserts {
 
+.sort-menus div .menu-info-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    text-align: center;
 }
+
+.sort-menus div h4,
+.sort-menus div p {
+    margin: 0;
+    font-size: 14px;
+}
+.sort-menus div .menu-info {
+  background-color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  width: 100%;
+  color: aliceblue;
+  position: absolute;
+  bottom: -5px;
+  left:-5px;
+}
+.sort-menus div .menu-info-overlay h4 {
+    font-weight: bold;
+}
+
+.sort-menus div .menu-info-overlay p {
+    font-weight: normal;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination button {
+    margin: 0 5px;
+}
+.description{
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.88);
+  text-align: center;
+  width: 100%;
+  padding:10px;
+  color: aliceblue;
+  position: absolute;
+  top:0;
+  left:0;
+  font-size: 20px !important;
+}
+.starters,
+.dishes,
+.desserts {}
 </style>
+
