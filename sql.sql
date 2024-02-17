@@ -114,6 +114,12 @@ INSERT INTO dishes (title, description, price, category_id, picture) VALUES
     ('Vin', 'Sélection fine de vins rouges et blancs.', 5.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL),
     ('Café', 'Café noir et riche en saveur.', 2.00, (SELECT category_id FROM categories WHERE title = 'Drink'), NULL);
 -- création d une liste d entrées
+INSERT INTO dishes (title, description, price, category_id, picture) VALUES 
+    ('Salade César', 'Salade verte avec du poulet grillé, du parmesan et une vinaigrette crémeuse.', 5.50, (SELECT category_id FROM categories WHERE title = 'Starter'), 'starter1.jpg'),
+    ('Soupe à l\'oignon', 'Soupe à l\'oignon traditionnelle gratinée avec du fromage.', 4.50, (SELECT category_id FROM categories WHERE title = 'Starter'), 'starter2.jpg'),
+    ('Bruschetta', 'Pain grillé garni de tomates fraîches, d\'ail, de basilic et d\'huile d\'olive.', 4.50, (SELECT category_id FROM categories WHERE title = 'Starter'), 'starter3.jpg'),
+    ('Escargots', 'Escargots cuits au beurre à l\'ail et aux herbes.', 6.00, (SELECT category_id FROM categories WHERE title = 'Starter'), 'starter4.jpg'),
+    ('Assiette de fromages', 'Sélection de fromages fins avec des fruits secs et des noix.', 7.00, (SELECT category_id FROM categories WHERE title = 'Starter'), 'starter5.jpg');
 -- creation d exemples de plats 
 INSERT INTO dishes (title, description, price, category_id, picture) VALUES 
     ('Raclette', 'Un plat traditionnel savoyard composé de fromage fondu, de pommes de terre et de charcuterie.', 15.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish1.jpg'),
