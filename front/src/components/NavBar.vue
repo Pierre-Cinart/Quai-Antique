@@ -1,15 +1,17 @@
 <template>
   <header>
+    <!-- Barre de navigation -->
     <nav class="navbar navbar-expand-lg bg-custom">
       <div class="container-fluid">
         <!-- Logo à gauche -->
         <div>
           <router-link to="/" class="navbar-brand">
+            <!-- Insérez votre logo ici -->
             <img src="@/assets/logo.png" alt="logo restaurant" style="border-radius: 50%;">
           </router-link>
         </div>
 
-        <!-- Bouton de bascule à droite -->
+        <!-- Bouton de bascule à droite pour les petits écrans -->
         <button class="navbar-toggler" type="button" @click="toggleNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -17,18 +19,29 @@
         <!-- Liens de navigation à droite -->
         <div :class="{'show': navbarOpen}" class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto">
+            <!-- Lien vers la page d'accueil -->
             <li class="nav-item">
               <router-link to="/" class="nav-link active">Accueil</router-link>
             </li>
+            <!-- Lien vers la page de consultation de la carte des menus -->
             <li class="nav-item">
               <router-link to="/carte-menus" class="nav-link" style="font-weight: bolder;">Consulter La Carte</router-link>
             </li>
+            <!-- Lien vers la page de réservation de table -->
             <li class="nav-item">
               <router-link to="/reservation" class="nav-link" style="font-weight: bolder;">Réserver Une Table</router-link>
             </li>
-            <li class="nav-item">
-              <router-link to="/authentification" class="nav-link">Se connecter</router-link>
+            <!-- Lien dynamique en fonction de la connexion de l'utilisateur -->
+            <li v-if="user && user" class="nav-item">
+               <!-- Si l'utilisateur est connecté, affiche un bouton pour se déconnecter -->
+               <button class="nav-link" @click="logout">Se déconnecter</button>
             </li>
+            <li v-else class="nav-item">
+               <!-- Si l'utilisateur n'est pas connecté, affiche le lien vers la page de connexion -->
+               <router-link to="/authentification" class="nav-link">Se connecter</router-link>
+            
+            </li>
+          
           </ul>
         </div>
       </div>
@@ -37,6 +50,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -46,33 +60,38 @@ export default {
   methods: {
     toggleNavbar() {
       this.navbarOpen = !this.navbarOpen;
+    },
+    logout() {
+      this.$store.commit('resetUserData');
+    }
+  },
+  computed: {
+    user() {
+      return this.$store.state.userData; // Assurez-vous que userData correspond à la propriété où vous stockez les données de l'utilisateur
     }
   }
-}
+};
 </script>
 
 <style scoped>
+/* Styles CSS pour la barre de navigation */
 header {
   font-size: 25px;
   font-family: 'Dancing Script', cursive;
   user-select: none;
   border: solid 2px #523e15;
 }
-
 .navBar {
   display: flex;
   justify-content: space-between;
   align-items: center; /* Centrer verticalement les éléments */
 }
-
 img {
   width: 80px;
 }
-
 .nav-item {
   margin: 10px;
 }
-
 .nav-item:hover {
   font-weight: bolder;
 }
@@ -85,7 +104,6 @@ img {
     width: 100%;
   }
 }
-
 /* Style personnalisé pour le fond de la navbar */
 .bg-custom {
   background-color: #ddae48b9; 

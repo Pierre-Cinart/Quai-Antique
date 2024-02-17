@@ -39,22 +39,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Authentification réussie
         //------------- delete les tentatives ----- login-attemps
 
-        $response = [
-            
-            "message" => "Connexion réussie ". $user['role'] . " " . $user['first_name'] . " " . $user['last_name'],
-            
+        $response = (object)[
+            "role"=> $user['role'],
+            "firstname" => $user['first_name'],
+            "lastname" => $user['last_name'],
+            "fullname" => $user['first_name'] . " " . $user['last_name'],            
         ];
+        // $response = [
+            
+        //     "message" => "Connexion réussie ". $user['role'] . " " . $user['first_name'] . " " . $user['last_name'],
+            
+        // ];
     } else {
         // Authentification échouée
         // ------------incrementer les tentatives ----- login-attemps
-        $response = [
-            
-            "message" => "Identifiants invalides"
-        ];
+        $response = null;
     }
 
     // Envoyer la réponse au format JSON
     echo json_encode($response);
+    // return json_encode($response);
 } else {
     // Méthode de requête non autorisée
     http_response_code(405);

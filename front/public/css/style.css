@@ -29,3 +29,11 @@
     padding-top: 5px;
     margin: auto;
   }
+  .error-message{
+    padding: 5px;
+    color:white;
+    background-color: red;
+    border: solid 1px black;
+    border-radius:5px;
+    font-size: 20px;
+  }

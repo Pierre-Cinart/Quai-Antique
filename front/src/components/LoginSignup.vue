@@ -2,6 +2,8 @@
   <div class="login-signup-form container">
     <h2>Connexion</h2>
     <form @submit.prevent="login">
+       <!-- Affichage de l'erreur -->
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
       <div class="mb-3">
         <label for="loginEmail" class="form-label">Email:</label>
         <input v-model="loginData.email" type="email" class="form-control" id="loginEmail" required />
@@ -17,71 +19,54 @@
     <br>
     <h2>Inscription</h2>
     <form @submit.prevent="register">
-      <div class="mb-3">
-        <label for="registerEmail" class="form-label">Email:</label>
-        <input v-model="registerData.email" type="email" class="form-control" id="registerEmail" required />
-      </div>
-      <div class="mb-3">
-        <label for="registerPassword" class="form-label">Mot de passe:</label>
-        <input v-model="registerData.password" type="password" class="form-control" id="registerPassword" pattern="^(?=.*[A-Z])(?=.*[0-9])(?=.*[!+-=?#]).{8,}$" title="Le mot de passe doit contenir au moins 1 majuscule, 1 chiffre, 1 symbole et être d'au moins 8 caractères" required />
-      </div>
-      <div class="mb-3">
-        <label for="confirmPassword" class="form-label">Confirmer le mot de passe:</label>
-        <input v-model="registerData.confirmPassword" type="password" class="form-control" id="confirmPassword" required />
-      </div>
-      <div class="mb-3">
-        <label for="registerFirstName" class="form-label">Nom:</label>
-        <input v-model="registerData.firstName" type="text" class="form-control" pattern="[A-Za-z]{3,}" title="Au moins 3 lettres" required />
-      </div>
-      <div class="mb-3">
-        <label for="registerLastName" class="form-label">Prénom:</label>
-        <input v-model="registerData.lastName" type="text" class="form-control" pattern="[A-Za-z]{3,}" title="Au moins 3 lettres" required />
-      </div>
-      <button type="submit" class="btn btn-success">S'inscrire</button>
+      <!-- Formualire d'inscription -->
     </form>
+   
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { ref } from 'vue';
+import { useStore } from 'vuex';
+import router from '@/router';
 
 export default {
-  data() {
-    return {
-      loginData: {
-        email: '',
-        password: ''
-      },
-      registerData: {
-        email: '',
-        password: '',
-        confirmPassword: '',
-        firstName: '',
-        lastName: ''
+  setup() {
+    const store = useStore();
+    const loginData = ref({
+      email: '',
+      password: ''
+    });
+    const errorMessage = ref('');
+
+    const login = async () => {
+      try {
+        const response = await store.dispatch('fetchUserData', loginData.value);
+        // Vérifier si la réponse contient des données valides
+        if (response && response.role !== null) {
+          // Authentification réussie, rediriger vers la page d'accueil
+          router.push('/');
+        } else {
+          // Afficher un message d'erreur approprié
+          errorMessage.value = "Identifiant ou mot de passe incorrect";
+        }
+      } catch (error) {
+        console.error('Erreur lors de la connexion:', error);
+        // Gérer les erreurs de connexion
+        errorMessage.value = "Erreur lors de la connexion. Veuillez réessayer.";
       }
     };
-  },
-  methods: {
-    login() {
-      const apiEndpoint = `${process.env.VUE_APP_API_URL}/login.php`;
 
-      // Envoyer les données de connexion au serveur
-      axios.post(apiEndpoint, this.loginData)
-        .then(response => {
-          // Réponse du serveur en cas de connexion réussie
-          console.log(response.data.message); // Message de succès
-        
-          // Vous pouvez également effectuer d'autres actions après une connexion réussie, comme rediriger l'utilisateur vers une autre page
-        })
-        .catch(error => {
-          // Gestion des erreurs en cas de problème de connexion
-          console.error('Erreur lors de la tentative de connexion:', error.response.data.error); // Message d'erreur renvoyé par le serveur
-        });
-    },
-    register() {
-      console.log('Tentative d\'inscription:', this.registerData);
-      // Vous pouvez ajouter des logiques ici pour simuler une action d'inscription
-    }
+    const register = async () => {
+      // Logique d'inscription
+    };
+
+    return {
+      loginData,
+      errorMessage,
+      login,
+      register
+    };
   }
 };
 </script>
