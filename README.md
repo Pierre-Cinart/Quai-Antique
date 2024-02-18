@@ -18,7 +18,12 @@ Le restaurant quai antique est un restaurant fictif
     composer require phpmailer/phpmailer
     ``` 
     pour installer PHPMailer, une bibliothèque pour l'envoi d'e-mails en PHP
-4. Créez un fichier à la racine du projet  `.env.` . Mettez à jour les variables d'environnement appropriées telles que `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, etc.
+4. À la racine de votre projet, exécutez 
+    ```bash
+    composer require vlucas/phpdotenv
+    ``` 
+    pour pouvoir utiliser le fichier .env
+5. Créez un fichier à la racine du projet  `.env.` . Mettez à jour les variables d'environnement appropriées telles que `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, etc.
 
    Exemple de fichier `.env` :
    ```env
