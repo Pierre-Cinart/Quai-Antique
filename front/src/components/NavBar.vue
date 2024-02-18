@@ -34,7 +34,7 @@
             <!-- Lien dynamique en fonction de la connexion de l'utilisateur -->
             <li v-if="user && user" class="nav-item">
                <!-- Si l'utilisateur est connecté, affiche un bouton pour se déconnecter -->
-               <button class="nav-link" @click="logout">Se déconnecter</button>
+               <router-link to="/" class="nav-link" @click="logout">Se déconnecter</router-link>
             </li>
             <li v-else class="nav-item">
                <!-- Si l'utilisateur n'est pas connecté, affiche le lien vers la page de connexion -->
