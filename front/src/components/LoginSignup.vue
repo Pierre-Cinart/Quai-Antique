@@ -20,8 +20,39 @@
     <h2>Inscription</h2>
     <form @submit.prevent="register">
       <!-- Formulaire d'inscription -->
+    
+      <div class="mb-3">
+        <label for="signupFirstName" class="form-label">Prénom:</label>
+        <input v-model="signupData.firstName" type="text" class="form-control" id="signupFirstName" required />
+      </div>
+      <div class="mb-3">
+        <label for="signupLastName" class="form-label">Nom:</label>
+        <input v-model="signupData.lastName" type="text" class="form-control" id="signupLastName" required />
+      </div>
+      <div class="mb-3">
+        <label for="signupEmail" class="form-label">Email:</label>
+        <input v-model="signupData.email" type="email" class="form-control" id="signupEmail" required />
+      </div>
+      <div class="mb-3">
+        <label for="signupTel" class="form-label">Téléphone:</label>
+        <input v-model="signupData.tel" type="tel" class="form-control" id="signupTel"  />
+      </div>
+      <div class="mb-3">
+        <label for="signupPassword" class="form-label">Mot de passe:</label>
+        <input v-model="signupData.password" type="password" class="form-control" id="signupPassword" required />
+      </div>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label">Confirmer le mot de passe:</label>
+        <input v-model="signupData.confirmPassword" type="password" class="form-control" id="confirmPassword" required />
+      </div>
+      <div class="mb-3">
+        <label for="allergies" class="form-label">Allergies:</label>
+        <input v-model="signupData.allergies" type="text" class="form-control" id="allergies" />
+      </div>
+      <button type="submit" class="btn btn-primary">S'inscrire</button>
     </form>
-    <!-- Ajoutez vos champs d'inscription ici -->
+    <!-- message d erreur -->
+    <p v-if="errorMessageSignup" class="error-message">{{ errorMessageSignup }}</p>
   </div>
 </template>
 
@@ -37,7 +68,17 @@ export default {
       email: '',
       password: ''
     });
+    const signupData = ref({
+      firstName: '',
+      lastName: '',
+      email: '',
+      tel: '',
+      password: '',
+      confirmPassword: '',
+      allergies: ''
+    });
     const errorMessage = ref('');
+    const errorMessageSignup = ref('');
 
     const login = async () => {
       try {
@@ -47,17 +88,15 @@ export default {
           const jwt = response.jwt;
           window.localStorage.setItem('jwt', jwt);
           // Afficher le JWT dans la console pour vérification
-            console.log('JWT dans le localStorage :', jwt);
+          console.log('JWT dans le localStorage :', jwt);
 
           if (response.role == 'admin' || response.role == 'super admin'){
             // Enregistrer le JWT dans le localStorage
             router.push('/dashboard');
           } else {
-             
             router.push('/');
           }
           // Authentification réussie, rediriger vers la page d'accueil
-          
         } else {
           // Afficher un message d'erreur approprié
           errorMessage.value = "Identifiant ou mot de passe incorrect";
@@ -70,12 +109,43 @@ export default {
     };
 
     const register = async () => {
-      // Logique d'inscription
-    };
+  try {
+    // Validation du prénom
+    if (!/^[a-zA-Z]{3,}$/.test(signupData.value.firstName)) {
+      throw new Error("Le prénom doit contenir au moins trois caractères alphabétiques.");
+    }
+    
+    // Validation du nom
+    if (!/^[a-zA-Z]{3,}$/.test(signupData.value.lastName)) {
+      throw new Error("Le nom doit contenir au moins trois caractères alphabétiques.");
+    }
+
+    // Validation du téléphone 
+    if (!/^\d+$/.test(signupData.value.tel) && signupData.value.tel!="") {
+      throw new Error("Le numéro de téléphone ne doit contenir que des chiffres.");
+    }
+    // Validation du mot de passe
+    if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}/.test(signupData.value.password)) {
+      throw new Error("Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, un chiffre et un symbole.");
+    }
+
+    if (signupData.value.password != signupData.value.confirmPassword) {
+      throw new Error("Les mots de passe ne correspondent pas . ");
+    }
+    router.push('/');
+    // Logique pour envoyer les données d'inscription au serveur si la validation réussit
+    console.log('Données d\'inscription :', signupData.value);
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription:', error);
+    errorMessageSignup.value = error.message;
+  }
+};
 
     return {
       loginData,
+      signupData,
       errorMessage,
+      errorMessageSignup,
       login,
       register
     };
