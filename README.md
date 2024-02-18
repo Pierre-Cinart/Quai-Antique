@@ -8,8 +8,17 @@ Le restaurant quai antique est un restaurant fictif
 ### Backend (PHP)
 
 1. Assurez-vous d'avoir [Composer](https://getcomposer.org/) installé sur votre machine.
-2. Naviguez vers le dossier `back` et exécutez `composer install` pour installer les dépendances PHP.
-3. Créez un fichier à la racine du projet  `.env.` . Mettez à jour les variables d'environnement appropriées telles que `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, etc.
+2. À la racine du projet exécutez :
+    ```bash
+    composer install
+    ``` 
+    pour installer les dépendances PHP.
+3. À la racine de votre projet, exécutez 
+    ```bash
+    composer require phpmailer/phpmailer
+    ``` 
+    pour installer PHPMailer, une bibliothèque pour l'envoi d'e-mails en PHP
+4. Créez un fichier à la racine du projet  `.env.` . Mettez à jour les variables d'environnement appropriées telles que `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD`, etc.
 
    Exemple de fichier `.env` :
    ```env
