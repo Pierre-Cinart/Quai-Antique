@@ -19,9 +19,9 @@
     <br>
     <h2>Inscription</h2>
     <form @submit.prevent="register">
-      <!-- Formualire d'inscription -->
+      <!-- Formulaire d'inscription -->
     </form>
-   
+    <!-- Ajoutez vos champs d'inscription ici -->
   </div>
 </template>
 
@@ -44,8 +44,13 @@ export default {
         const response = await store.dispatch('fetchUserData', loginData.value);
         // Vérifier si la réponse contient des données valides
         if (response && response.role !== null) {
+          if (response.role == 'admin' || response.role == 'super admin'){
+            router.push('/dashboard');
+          } else {
+            router.push('/');
+          }
           // Authentification réussie, rediriger vers la page d'accueil
-          router.push('/');
+          
         } else {
           // Afficher un message d'erreur approprié
           errorMessage.value = "Identifiant ou mot de passe incorrect";

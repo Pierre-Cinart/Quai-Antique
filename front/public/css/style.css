@@ -37,7 +37,7 @@
     border-radius:5px;
     font-size: 20px;
   }
-
+  /*bouton de reservation */
   .btn-reserv{
     text-decoration: none;
     background-color: rgb(47, 138, 38);
@@ -50,3 +50,16 @@
     border: #ddae48 solid 2px;
     border-radius: 5px;
   }
+
+  .page-info {
+    width: 100%;
+    height:40vh;
+    padding-top:5%;
+    margin-top:10px;
+    background-color: aliceblue;
+    text-align: center;
+}
+.page-info p {
+    font-size: 22px;
+    font-weight: bolder;
+}
