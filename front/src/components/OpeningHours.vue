@@ -17,7 +17,7 @@
           </span>
         </li>
         <li v-if="sunday">
-          <span class="day">Le Dimanche : </span>
+          <span class="day">Le Dimanche et jours fériés: </span>
           <span>
             de {{ formatTime(sunday.morning_start) }} à {{ formatTime(sunday.morning_end) }} 
           </span>

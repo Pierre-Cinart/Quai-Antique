@@ -39,17 +39,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Authentification réussie
         //------------- delete les tentatives ----- login-attemps
 
+        // Générer le JWT
+        $jwt = bin2hex(random_bytes(32)); // Utilisez 32 octets pour obtenir 64 caractères hexadécimaux
+
+        // Enregistrer le JWT dans la base de données pour cet utilisateur
+        $queryUpdateJWT = "UPDATE users SET jwt = :jwt WHERE user_id = :user_id";
+        $statementUpdateJWT = $pdo->prepare($queryUpdateJWT);
+        $statementUpdateJWT->bindParam(':jwt', $jwt);
+        $statementUpdateJWT->bindParam(':user_id', $user['user_id']);
+        $statementUpdateJWT->execute();
+
+        // Répondre avec les informations de l'utilisateur et le JWT
         $response = (object)[
             "role"=> $user['role'],
             "firstname" => $user['first_name'],
             "lastname" => $user['last_name'],
-            "fullname" => $user['first_name'] . " " . $user['last_name'],            
+            "fullname" => $user['first_name'] . " " . $user['last_name'],
+            "jwt" => $jwt // Ajouter le JWT à la réponse
         ];
-        // $response = [
-            
-        //     "message" => "Connexion réussie ". $user['role'] . " " . $user['first_name'] . " " . $user['last_name'],
-            
-        // ];
     } else {
         // Authentification échouée
         // ------------incrementer les tentatives ----- login-attemps
@@ -65,6 +72,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo json_encode(["error" => "Méthode non autorisée"]);
     exit();
 }
-
-
 ?>

@@ -29,6 +29,10 @@ export default createStore({
   getters: {
     getUserRole: state => {
       return state.userData ? state.userData.role : null;
+    },
+    getUserJwt: state => {
+      return state.userData ? state.userData.jwt : null;
     }
   }
+  
 });
