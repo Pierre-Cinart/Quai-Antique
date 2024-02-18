@@ -1,15 +1,12 @@
 <template>
     <div class="home_page">
     <TitleBox/>
-
-      
-      
       <div class = "home_pictures">
         <HomePictures />
       </div>
 
       <div class="reservation_div">
-        <div class="btn_div">
+        <div class="btn-reserv">
         <router-link to="/reservation" class="nav-link">Réserver Une Table</router-link>
         </div>
       </div>
@@ -41,17 +38,7 @@
     padding: 5px;
     
   }
-  .btn_div{
-    background-color: rgb(47, 138, 38);
-    width:196px;
-    font-size: 24px;
-    padding: 8px;
-    margin: auto;
-    text-align: center;
-    color: aliceblue;
-    border: #ddae48 solid 2px;
-    border-radius: 5px;
-  }
+  
   .home_pictures {
     margin: auto;
     padding-top:15px;

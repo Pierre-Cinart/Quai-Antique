@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.state.userData; // Assurez-vous que userData correspond à la propriété où vous stockez les données de l'utilisateur
+      return this.$store.state.userData; 
     }
   }
 };
