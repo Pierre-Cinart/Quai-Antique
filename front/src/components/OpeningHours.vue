@@ -3,7 +3,7 @@
       <h4>Nos heures d'ouverture :</h4>
       <ul>
         <li v-if="week">
-          <span class="day">Du Lundi au Vendredi : </span>
+          <span class="day"> Du Lundi au Vendredi :</span>
           <span>
             de {{ formatTime(week.morning_start) }} à {{ formatTime(week.morning_end) }} <br>
             et de {{ formatTime(week.after_start) }} à {{ formatTime(week.after_end) }}
@@ -30,6 +30,7 @@
   import axios from 'axios';
   
   export default {
+    name : 'OpeningHours',
     data() {
       return {
         week: null,
@@ -62,7 +63,7 @@
   
   <style scoped>
   .day{
-    font-weight: 666;
+    font-weight: 600;
     font-size: 18px;
   }
  .horraires {

@@ -1,5 +1,5 @@
 
-<template class="admin-accueil">
+<template>
     <!--Gestion admin images page d 'acceuil-->
     <h2>Modifier les plats présentés à l'accueil</h2>
     <section class="admin-accueil">
@@ -12,6 +12,7 @@
 import axios from 'axios';
 
 export default {
+    name : 'AdminHome',
   data() {
     return {
       images: [],
@@ -31,7 +32,18 @@ export default {
 </script>
 
 <style scoped>
+ section , h2 {
+    margin:auto;
+  }
+  h2{
+    text-decoration :underline;
+  }
 .admin-accueil {
     display: flex;
+  }
+  img {
+    width: 100px;
+    margin:5px;
+    border: solid 1px black;
   }
 </style>

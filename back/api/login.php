@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Répondre avec les informations de l'utilisateur et le JWT
         $response = (object)[
+            "id" => $user['user_id'],
             "role"=> $user['role'],
             "firstname" => $user['first_name'],
             "lastname" => $user['last_name'],
@@ -64,8 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Envoyer la réponse au format JSON
+    // Enregistrer le JWT dans le localStorage
+    
     echo json_encode($response);
-    // return json_encode($response);
+    
 } else {
     // Méthode de requête non autorisée
     http_response_code(405);

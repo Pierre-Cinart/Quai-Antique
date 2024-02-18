@@ -6,46 +6,25 @@
     <p>Page réservée aux administrateurs</p>
     </div>
 
-    <!--Gestion images page d 'acceuil-->
-    <h2>Modifier les plats présentés à l'accueil</h2>
-    <section class="admin-accueil">
-      <div v-for="(image, index) in images" :key="index">
-        <img :src="'/images/dishes/' + image.src" :alt="image.alt" />
-      </div>
-    </section>
-
+    <!--Gestion admin images page d 'acceuil-->
+    <AdminHome/>
+    <br>
     <!--Gestion des reservations-->
-    <section class="admin-reserv">
-       <p>requete des reservations et possibilité de les supprimer</p>
-    </section>
-
+    <AdminReserv/>
     <!--Gestion des horraires-->
-    <section class="admin-horraire">
-      <p>requete des horraires et possibilité de les modifier</p>
-    </section>
+    <AdminHours/>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-
+import AdminHome from '@/components/admin/AdminHome.vue'
+import AdminReserv from '@/components/admin/AdminReserv.vue'
+import AdminHours from '@/components/admin/AdminHours.vue'
 export default {
-  data() {
-    return {
-      images: [],
-    };
-  },
-  mounted() {
-    const apiEndpoint = `${process.env.VUE_APP_API_URL}/img_home.php`;
-    axios.get(apiEndpoint)
-      .then(response => {
-        this.images = response.data;
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération d'images", error);
-      });
-  },
-};
+  components : {
+     AdminHome,AdminReserv,AdminHours
+  }
+}
 </script>
 
 <style scoped>
@@ -58,11 +37,7 @@ export default {
     display: flex;
     flex-direction: column;
   }
-  img {
-    width: 100px;
-    margin:5px;
-    border: solid 1px black;
-  }
+  
   .admin-title {
     user-select: none;
     background-color: rgba(0, 0, 0, 0.212);

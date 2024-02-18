@@ -44,9 +44,16 @@ export default {
         const response = await store.dispatch('fetchUserData', loginData.value);
         // Vérifier si la réponse contient des données valides
         if (response && response.role !== null) {
+          const jwt = response.jwt;
+          window.localStorage.setItem('jwt', jwt);
+          // Afficher le JWT dans la console pour vérification
+            console.log('JWT dans le localStorage :', jwt);
+
           if (response.role == 'admin' || response.role == 'super admin'){
+            // Enregistrer le JWT dans le localStorage
             router.push('/dashboard');
           } else {
+             
             router.push('/');
           }
           // Authentification réussie, rediriger vers la page d'accueil

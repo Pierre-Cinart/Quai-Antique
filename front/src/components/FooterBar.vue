@@ -18,14 +18,7 @@
         <router-link to="/reservation" class="nav-link">Réserver Une Table</router-link>
         <router-link to="/authentification" class="nav-link">Créer un compte client</router-link>
       </div>
-      <div class="container horraires">
-        <ul>
-          <h4>Nos heures d ' ouverture :</h4>
-          <li>Du Lundi au Vendredi de 11h30 à 15h00 et de 19h00 à 23h00 </li>
-          <li>Le Samedi de 11h30 à 16h00 et de 19h00 à 00h00 </li>
-          <li>Le Dimanche de 11h30 à 15h00 </li>
-        </ul>
-      </div>
+    <OpeningHours/>
     </div>
     <div class="container text-center">
       <span>&copy; Cinartdev.fr</span>
@@ -34,8 +27,10 @@
 </template>
 
 <script>
+import OpeningHours from '@/components/OpeningHours'
 export default {
-  name: 'FooterBar'
+  name: 'FooterBar',
+  components : {OpeningHours}
 }
 </script>
 
