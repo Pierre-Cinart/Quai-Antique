@@ -1,6 +1,6 @@
 <template>
-  <!-- Section principale du calendrier -->
-  <section class="calendar-box">
+    <!-- Section principale du calendrier -->
+    <section class="calendar-box">
     <!-- Conteneur pour le titre et la date sélectionnée -->
     <div class="container">
       <div class="row justify-content-center">
@@ -47,15 +47,67 @@
    <!-- Affichage de la date sélectionnée -->
     <span class="selected-date">{{ formattedSelectedDate }}</span>
   </section>
+  
+     <!-- Section du formulaire de réservation -->
+  <section class="my-form container">
+    <h2>Réservation</h2>
+    <form>
+      <div class="row mb-3">
+      
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="nom">Nom :</label>
+        <div class="col-sm-9">
+          <input type="text" id="nom" v-model="reservation.nom" class="form-control" required>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="prenom">Prénom :</label>
+        <div class="col-sm-9">
+          <input type="text" id="prenom" v-model="reservation.prenom" class="form-control" required>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="email">Email :</label>
+        <div class="col-sm-9">
+          <input type="email" id="email" v-model="reservation.email" class="form-control" required>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="tel">Téléphone :</label>
+        <div class="col-sm-9">
+          <input type="tel" id="tel" v-model="reservation.tel" class="form-control" required>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="couverts">Nombre de couverts :</label>
+        <div class="col-sm-9">
+          <input type="number" id="couverts" v-model="reservation.couverts" class="form-control" required>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label class="col-sm-3 col-form-label" for="allergies">Allergies :</label>
+        <div class="col-sm-9">
+          <textarea id="allergies" v-model="reservation.allergies" class="form-control"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <button type="submit" class="btn btn-success">Réserver</button>
+        </div>
+      </div>
+    </form>
+  </section>
+  
 </template>
 
 <script>
 export default {
-  name : 'CalendarBox',
+  name: 'CalendarBox',
   data() {
     return {
       // Jours de la semaine
-      weekDays: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+      weekDays: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
       // Date actuelle
       currentDate: new Date(),
       // Mois actuel affiché
@@ -63,7 +115,16 @@ export default {
       // Semaines du mois
       weeks: [],
       // Date sélectionnée
-      selectedDate: null
+      selectedDate: null,
+      // Données de la réservation
+      reservation: {
+        nom: '',
+        prenom: '',
+        email: '',
+        tel: '',
+        couverts: '',
+        allergies: ''
+      }
     };
   },
   computed: {
@@ -71,6 +132,16 @@ export default {
     formattedSelectedDate() {
       if (this.selectedDate) {
         return this.selectedDate.toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      }
+      return '';
+    },
+    // Formatage de la date sélectionnée pour le input type date
+    selectedDateFormatted() {
+      if (this.selectedDate) {
+        const year = this.selectedDate.getFullYear();
+        const month = `${this.selectedDate.getMonth() + 1}`.padStart(2, '0');
+        const day = `${this.selectedDate.getDate()}`.padStart(2, '0');
+        return `${year}-${month}-${day}`;
       }
       return '';
     },
@@ -88,12 +159,11 @@ export default {
     }
   },
   mounted() {
-    //affiche le calendrier
+    // Afficher le calendrier lors du montage du composant
     this.updateCalendar(this.currentDate);
-    },
-
+  },
   methods: {
-    // Met à jour le calendrier avec la date spécifiée
+    // Mettre à jour le calendrier avec la date spécifiée
     updateCalendar(date) {
       this.currentDate = date;
       this.currentMonth = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
@@ -120,26 +190,26 @@ export default {
 
       this.weeks = weeks;
     },
-    // Sélectionne une date sur le calendrier
+    // Sélectionner une date sur le calendrier
     selectDate(date) {
       if (date.date && !this.isDateDisabled(date)) {
         this.selectedDate = date.date;
       }
     },
-    // Vérifie si une date est désactivée
+    // Vérifier si une date est désactivée
     isDateDisabled(date) {
       return date.date && date.date < new Date().setHours(0, 0, 0, 0);
     },
-    // Vérifie si une date est sélectionnée
+    // Vérifier si une date est sélectionnée
     isDateSelected(date) {
       return date.date && this.selectedDate && date.date.toDateString() === this.selectedDate.toDateString();
     },
-    // Passe au mois précédent
+    // Passer au mois précédent
     goToPreviousMonth() {
       const previousMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - 1, 1);
       this.updateCalendar(previousMonth);
     },
-    // Passe au mois suivant si disponible
+    // Passer au mois suivant si disponible
     goToNextMonth() {
       const nextMonth = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() + 1, 1);
       const sixMonthsLater = new Date();
@@ -241,4 +311,19 @@ export default {
   width: 50%;
   margin: auto;
 }
+@media  screen  and (max-device-width: 700px) {
+  .calendar-box i {
+  margin: 5px;
+  
+}
+
+#calendar {
+  
+  font-size: 15px;
+  width: 100%;
+  border-collapse: collapse;
+}
+}
+
+
 </style>

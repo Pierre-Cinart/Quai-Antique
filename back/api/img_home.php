@@ -9,7 +9,7 @@ header("Access-Control-Allow-Methods: GET");
 require_once 'bdd.php';
 
 // Requête SQL pour récupérer les données de la table home_pictures avec une jointure sur la table dishes
-$sql = "SELECT hp.id AS home_picture_id, d.picture AS picture_name, d.category_id
+$sql = "SELECT hp.id AS home_picture_id, d.picture AS picture_name, d.category_id, d.title, d.price
         FROM home_pictures hp
         INNER JOIN dishes d ON hp.dish_id = d.dish_id";
 

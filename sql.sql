@@ -45,16 +45,19 @@ CREATE TABLE  dishes (
 
 
 -- Création de la table des réservations
-CREATE TABLE  reservations (
+CREATE TABLE reservations (
     reservation_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(255),
+    tel VARCHAR(20),
     number_of_guests INT NOT NULL,
     reservation_date DATE NOT NULL,
     reservation_time TIME NOT NULL,
     allergies TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 
 -- Création de la table des logs
 CREATE TABLE  logs (
@@ -128,3 +131,9 @@ INSERT INTO dishes (title, description, price, category_id, picture) VALUES
     ('Raclette', 'Un plat traditionnel savoyard composé de fromage fondu, de pommes de terre et de charcuterie.', 15.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish1.jpg'),
     ('Fondue savoyarde', 'Un plat emblématique de la région savoyarde, où le fromage fondu est dégusté avec du pain.', 20.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish2.jpg'),
     ('Tartiflette', "Un plat savoyard à base de pommes de terre, de reblochon, d'oignons et de lardons.", 18.00, (SELECT category_id FROM categories WHERE title = 'Dish'), 'dish3.jpg');
+INSERT INTO dishes (title, description, price, category_id, picture) VALUES 
+    ('Tarte aux myrtilles', 'Une délicieuse tarte aux myrtilles des montagnes savoyardes, avec une pâte croustillante et une garniture généreuse de myrtilles fraîches.', 6.00, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert1.jpg'), 
+    ('Beignets de pommes de terre', 'Des beignets croustillants et dorés à base de pommes de terre râpées et assaisonnées, une spécialité savoyarde incontournable.', 6.50, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert2.jpg'), 
+    ('Gâteau de Savoie', 'Un gâteau moelleux et léger à base de farine, de sucre, de beurre et d\'oeufs, parfumé à la vanille, une spécialité sucrée savoyarde.', 5.00, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert3.jpg'), 
+    ('Sablés de Chartreuse', 'Des sablés fondants et parfumés à la Chartreuse, une liqueur emblématique de la région savoyarde, parfaits pour accompagner un café.', 4.50, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert4.jpg'), 
+    ('Tourte aux Noix', 'Une tourte croustillante et savoureuse, garnie de cerneaux de noix, de miel des montagnes et d\'une touche de rhum, une spécialité sucrée typique de la Savoie.', 7.00, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert5.jpg');

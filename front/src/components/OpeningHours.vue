@@ -52,11 +52,18 @@
     },
     methods: {
       formatTime(time) {
-        if (!time) return ''; // Si l'heure n'est pas définie, retourner une chaîne vide
-        const hour = Math.floor(time / 100);
-        const minute = time % 100;
-        return `${hour.toString().padStart(2, '0')}h${minute.toString().padStart(2, '0')}`;
+        if (time === null || time === undefined) return ''; // Gérer le cas où le temps est null ou undefined
+
+        let formattedTime = String(time);
+        if (formattedTime.length < 4) {
+          // Ajouter des zéros avant si le nombre comporte moins de 4 chiffres
+          formattedTime = formattedTime.padStart(4, '0');
+        }
+        const hour = formattedTime.slice(0, 2); // Prendre les deux premiers chiffres pour les heures
+        const minute = formattedTime.slice(2); // Prendre les deux derniers chiffres pour les minutes
+        return `${hour}:${minute}`;
       }
+
     }
   };
   </script>
