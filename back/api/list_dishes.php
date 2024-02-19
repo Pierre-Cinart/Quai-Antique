@@ -8,10 +8,8 @@ header("Access-Control-Allow-Methods: GET");
 // Inclure le fichier de configuration de la base de données
 require_once 'bdd.php';
 
-// Requête SQL pour récupérer les données de la table home_pictures avec une jointure sur la table dishes
-$sql = "SELECT hp.id AS home_picture_id, d.picture AS picture_name, d.category_id
-        FROM home_pictures hp
-        INNER JOIN dishes d ON hp.dish_id = d.dish_id";
+// Requête SQL pour récupérer les IDs et les URLs des images des plats de la catégorie spécifiée
+$sql = "SELECT dish_id, picture, category_id FROM dishes where category_id !=4";
 
 try {
     // Exécutez la requête
@@ -19,31 +17,32 @@ try {
 
     // Vérifiez s'il y a des résultats
     if ($stmt) {
-        // Récupérez les données des images
+        // Récupérez les données des plats
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Ajoutez le chemin de l'image en fonction de la catégorie
-        foreach ($data as &$image) {
-            switch ($image['category_id']) {
+        // Traiter les chemins d'accès en fonction de la catégorie
+        $images = array_map(function($item) {
+            $basePath = '/images/';
+            $category = '';
+            switch ($item['category_id']) {
                 case 1:
-                    $image['path'] = '/images/starters/' . $image['picture_name'];
+                    $category = 'starters/';
                     break;
                 case 2:
-                    $image['path'] = '/images/dishes/' . $image['picture_name'];
+                    $category = 'dishes/';
                     break;
                 case 3:
-                    $image['path'] = '/images/desserts/' . $image['picture_name'];
+                    $category = 'desserts/';
                     break;
                 default:
-                    $image['path'] = ''; // Par défaut, path est une chaîne vide
+                    $category = 'unknown/';
             }
-            // Supprimez les colonnes non nécessaires
-            unset($image['picture_name']);
-            unset($image['category_id']);
-        }
+            $item['path'] = $basePath . $category . $item['picture'];
+            return $item;
+        }, $data);
 
         // Encodez les résultats en format JSON
-        $json = json_encode($data);
+        $json = json_encode($images);
 
         // Envoyez la réponse JSON
         echo $json;

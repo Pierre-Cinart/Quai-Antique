@@ -4,7 +4,7 @@
       <div class="carousel-inner">
         <div v-for="(image, index) in images" :key="index" :class="{ 'carousel-item': true, 'active': index === 0 }">
           <div class="carousel-item-content">
-            <img :src="'/images/dishes/' + image.src" :alt="image.alt" class="d-block w-100" />
+            <img :src="image.path" :alt="image.alt" class="d-block w-100" />
             <div class="carousel-item-overlay">
               <h3>{{ image.title }}</h3>
               <p>{{ image.price }} €</p>
@@ -53,12 +53,12 @@ export default {
       .catch(error => {
         console.error("Erreur lors de la récupération d'images", error);
       });
-  },
+  }
 };
 </script>
 
 <style>
- #imageCarousel {
+#imageCarousel {
   padding: 10px;
   max-width: 500px;
   margin: auto;
