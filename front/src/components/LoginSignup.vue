@@ -60,6 +60,7 @@
 import { ref } from 'vue';
 import { useStore } from 'vuex';
 import router from '@/router';
+import axios from 'axios';
 
 export default {
   setup() {
@@ -109,37 +110,55 @@ export default {
     };
 
     const register = async () => {
-  try {
-    // Validation du prénom
-    if (!/^[a-zA-Z]{3,}$/.test(signupData.value.firstName)) {
-      throw new Error("Le prénom doit contenir au moins trois caractères alphabétiques.");
-    }
-    
-    // Validation du nom
-    if (!/^[a-zA-Z]{3,}$/.test(signupData.value.lastName)) {
-      throw new Error("Le nom doit contenir au moins trois caractères alphabétiques.");
-    }
+      try {
+        // Validation des données d'inscription
+        
+       // Validation du prénom
+        if (!/^[a-zA-Z]{3,}$/.test(signupData.value.firstName)) {
+            throw new Error("Le prénom doit contenir au moins trois caractères alphabétiques.");
+        }
 
-    // Validation du téléphone 
-    if (!/^\d+$/.test(signupData.value.tel) && signupData.value.tel!="") {
-      throw new Error("Le numéro de téléphone ne doit contenir que des chiffres.");
-    }
-    // Validation du mot de passe
-    if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}/.test(signupData.value.password)) {
-      throw new Error("Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, un chiffre et un symbole.");
-    }
+        // Validation du nom
+        if (!/^[a-zA-Z]{3,}$/.test(signupData.value.lastName)) {
+            throw new Error("Le nom doit contenir au moins trois caractères alphabétiques.");
+        }
 
-    if (signupData.value.password != signupData.value.confirmPassword) {
-      throw new Error("Les mots de passe ne correspondent pas . ");
-    }
-    router.push('/');
-    // Logique pour envoyer les données d'inscription au serveur si la validation réussit
-    console.log('Données d\'inscription :', signupData.value);
-  } catch (error) {
-    console.error('Erreur lors de l\'inscription:', error);
-    errorMessageSignup.value = error.message;
-  }
-};
+        // Validation du téléphone 
+        if (!/^\d{10}$/.test(signupData.value.tel) && signupData.value.tel !== "") {
+            throw new Error("Le numéro de téléphone doit contenir 10 chiffres uniquement.");
+        }
+
+        // Validation du mot de passe
+        if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}/.test(signupData.value.password)) {
+          throw new Error("Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, un chiffre et un symbole.");
+        }
+
+        if (signupData.value.password != signupData.value.confirmPassword) {
+          throw new Error("Les mots de passe ne correspondent pas.");
+        }
+
+        // données d'inscription à envoyées l'API
+        const registrationData = {
+          firstName: signupData.value.firstName,
+          lastName: signupData.value.lastName,
+          email: signupData.value.email,
+          tel: signupData.value.tel,
+          password: signupData.value.password,
+          allergies: signupData.value.allergies
+        };
+        const apiEndpoint = `${process.env.VUE_APP_API_URL}/register.php`;
+        // Faites votre requête POST vers votre API de registre
+        const response = await axios.post(apiEndpoint, registrationData);
+
+        // Si la requête réussit, vous pouvez rediriger l'utilisateur ou faire d'autres actions nécessaires
+        console.log('Réponse de l\'API:', response.data);
+        router.push('/'); // Rediriger vers la page d'accueil après l'inscription réussie
+
+      } catch (error) {
+        console.error('Erreur lors de l\'inscription:', error);
+        errorMessageSignup.value = error.message;
+      }
+    };
 
     return {
       loginData,
@@ -152,7 +171,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 /* LoginSignupForm */
 .login-signup-form {
