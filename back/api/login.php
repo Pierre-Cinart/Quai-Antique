@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Générer le JWT
         $jwt = bin2hex(random_bytes(32)); // Utilisez 32 octets pour obtenir 64 caractères hexadécimaux
-
+       
         // Enregistrer le JWT dans la base de données pour cet utilisateur
         $queryUpdateJWT = "UPDATE users SET jwt = :jwt WHERE user_id = :user_id";
         $statementUpdateJWT = $pdo->prepare($queryUpdateJWT);
@@ -49,10 +49,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $statementUpdateJWT->bindParam(':user_id', $user['user_id']);
         $statementUpdateJWT->execute();
 
+        //camouflage des roles
+        
+        function assignRoleCode($role) {
+            switch ($role) {
+                case 'client':
+                    return 321;
+                case 'admin':
+                    return 555;
+                case 'super admin':
+                    return 745;
+                default:
+                    return 0; // Code de rôle par défaut si le rôle n'est pas reconnu
+            }
+        }
+        
+        // Utilisation de la fonction pour attribuer le code de rôle
+        $roleCode = assignRoleCode($user['role']);
+        
         // Répondre avec les informations de l'utilisateur et le JWT
-        $response = (object)[
+        $response = (object) [
             "id" => $user['user_id'],
-            "role"=> $user['role'],
+            "role" => $roleCode, // Utilisation du code de rôle attribué
             "firstname" => $user['first_name'],
             "lastname" => $user['last_name'],
             "fullname" => $user['first_name'] . " " . $user['last_name'],

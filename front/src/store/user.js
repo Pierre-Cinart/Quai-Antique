@@ -1,13 +1,10 @@
-// store/user.js
-import { createStore } from 'vuex';
 import axios from 'axios';
 
-export default createStore({
+export default {
   state: {
     userData: null
   },
   getters: {
-    // Définir un getter pour récupérer le rôle de l'utilisateur depuis state.userData
     getUserRole: state => {
       return state.userData ? state.userData.role : null;
     }
@@ -17,9 +14,7 @@ export default createStore({
       state.userData = data;
     },
     resetUserData(state) {
-        console.log(state.userData);
-        state.userData = null;
-        console.log(state.userData);
+      state.userData = null;
     }
   },
   actions: {
@@ -28,7 +23,8 @@ export default createStore({
       try {
         const response = await axios.post(apiEndpoint, requestData);
         commit('setUserData', response.data);
-        console.log(response.data);
+         // Stockez les données d'utilisateur dans localStorage
+      localStorage.setItem('userData', JSON.stringify(response.data));
         return response.data;
       } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
@@ -36,5 +32,4 @@ export default createStore({
       }
     }
   },
-  
-});
+};

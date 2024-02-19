@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import PageNotFound from '@/views/PageNotFound.vue';
-import store from '@/store/user'; // Importez le store user.js
+
 
 const routes = [
-  // ... autres routes
 
   {
     path: '/authentification',
@@ -50,23 +49,26 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const userRole = store.state.userData ? store.state.userData.role : null;
+  const userRole = parseInt(localStorage.getItem('role')); // Assurez-vous de convertir en entier
+  console.log('User role:', userRole);
+  console.log('Is admin route:', to.meta.requiresAdmin);
+
   const isAdminRoute = to.matched.some(record => record.meta.requiresAdmin);
 
-  // Vérifier si l'utilisateur a accès à la route d'administration
   if (isAdminRoute) {
-    if (userRole !== 'admin' && userRole !== 'super admin') {
-      // Rediriger vers la page d'erreur 403 si l'accès est interdit
+    if (userRole !== 555 && userRole !== 745) {
+      console.log('Access denied for admin route');
       next({ name: 'ForbiddenAccess' });
     } else {
-      // Continuer vers la route demandée si l'accès est autorisé
+      console.log('Access granted for admin route');
       next();
     }
   } else {
-    // Si ce n'est pas une route d'administration, continuer normalement
+    console.log('Not an admin route');
     next();
   }
 });
+
 
 
 export default router;

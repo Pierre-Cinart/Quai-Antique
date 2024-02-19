@@ -61,8 +61,10 @@ import { ref } from 'vue';
 import { useStore } from 'vuex';
 import router from '@/router';
 import axios from 'axios';
+import { updateExpirationTime } from '@/js/localStorage'; 
 
 export default {
+  
   setup() {
     const store = useStore();
     const loginData = ref({
@@ -86,13 +88,16 @@ export default {
         const response = await store.dispatch('fetchUserData', loginData.value);
         // Vérifier si la réponse contient des données valides
         if (response && response.role !== null) {
-          const jwt = response.jwt;
-          window.localStorage.setItem('jwt', jwt);
+          
+          // Enregistrer le JWT et les info dans le localStorage
+          window.localStorage.setItem('jwt',response.jwt);
+          window.localStorage.setItem('id',response.id);
+          window.localStorage.setItem('role',response.role);
           // Afficher le JWT dans la console pour vérification
-          console.log('JWT dans le localStorage :', jwt);
+          console.log('role localStorage :', localStorage.getItem('role'));
+          updateExpirationTime('userData', 60); // Met à jour le temps d'expiration à 1 heure de plus (60 minutes)
 
-          if (response.role == 'admin' || response.role == 'super admin'){
-            // Enregistrer le JWT dans le localStorage
+          if (response.role == '555' || response.role == '745'){
             router.push('/dashboard');
           } else {
             router.push('/');

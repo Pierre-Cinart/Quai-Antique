@@ -32,16 +32,14 @@
               <router-link to="/reservation" class="nav-link" style="font-weight: bolder;">Réserver Une Table</router-link>
             </li>
             <!-- Lien dynamique en fonction de la connexion de l'utilisateur -->
-            <li v-if="user && user" class="nav-item">
-               <!-- Si l'utilisateur est connecté, affiche un bouton pour se déconnecter -->
-               <router-link to="/" class="nav-link" @click="logout">Se déconnecter</router-link>
+            <li v-if="isLoggedIn" class="nav-item">
+              <!-- Si l'utilisateur est connecté, affiche un bouton pour se déconnecter -->
+              <router-link to="/" class="nav-link" @click="logoutAndRefresh">Se déconnecter</router-link>
             </li>
             <li v-else class="nav-item">
-               <!-- Si l'utilisateur n'est pas connecté, affiche le lien vers la page de connexion -->
-               <router-link to="/authentification" class="nav-link">Se connecter</router-link>
-            
+              <!-- Si l'utilisateur n'est pas connecté, affiche le lien vers la page de connexion -->
+              <router-link to="/authentification" class="nav-link">Se connecter</router-link>
             </li>
-          
           </ul>
         </div>
       </div>
@@ -50,6 +48,7 @@
 </template>
 
 <script>
+import router from '@/router';
 
 export default {
   data() {
@@ -57,18 +56,36 @@ export default {
       navbarOpen: false
     };
   },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.getUserRole !== null;
+    }
+  },
   methods: {
     toggleNavbar() {
       this.navbarOpen = !this.navbarOpen;
     },
-    logout() {
+    logoutAndRefresh() {
+      // Supprimer les données d'utilisateur du localStorage
+      localStorage.removeItem('jwt');
+      localStorage.removeItem('id');
+      localStorage.removeItem('role');
+      localStorage.removeItem('userData');
+      // Déconnexion de l'utilisateur
       this.$store.commit('resetUserData');
+      // Rediriger vers la page d'accueil
+      router.push('/');
+    },
+    restoreUserFromLocalStorage() {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      if (userData) {
+        this.$store.commit('setUserData', userData);
+      }
     }
   },
-  computed: {
-    user() {
-      return this.$store.state.userData; 
-    }
+  mounted() {
+    // Restaurer les données de l'utilisateur depuis le localStorage lors du montage du composant
+    this.restoreUserFromLocalStorage();
   }
 };
 </script>
@@ -95,7 +112,7 @@ img {
 .nav-item:hover {
   font-weight: bolder;
 }
-.nav-link{
+.nav-link {
   color: rgb(40, 105, 34);
 }
 /* Ajoutez une règle de media query pour les écrans plus petits */
