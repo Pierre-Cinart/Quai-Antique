@@ -13,60 +13,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Vérifier si le formulaire d'inscription est soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Récupérer les données du formulaire
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $password = $_POST['password'];
-    $confirmPassword = $_POST['confirmPassword'];
-    $firstName = $_POST['firstName'];
-    $lastName = $_POST['lastName'];
+// Vérifier si la méthode de la requête est POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Inclure le fichier bdd.php pour établir une connexion à la base de données
+    require_once 'bdd.php';
+    
+    // Récupérer les données envoyées depuis le formulaire
+    $data = json_decode(file_get_contents("php://input"));
 
-    // Validation des données
-    if (!$email || !$password || !$confirmPassword || !$firstName || !$lastName) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Tous les champs sont obligatoires.']);
-        exit();
-    }
-
-    if ($password !== $confirmPassword) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Les mots de passe ne correspondent pas.']);
-        exit();
-    }
-
-    // Appliquer les règles de validation pour le mot de passe (majuscule, chiffre, symbole, longueur)
-    $passwordRegex = '/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!+-=?#]).{8,}$/';
-    if (!preg_match($passwordRegex, $password)) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Le mot de passe ne respecte pas les critères.']);
-        exit();
-    }
-
-    // Autres validations (par exemple, longueur du prénom et du nom)
-    $nameRegex = '/^[A-Za-z]{3,}$/';
-    if (!preg_match($nameRegex, $firstName) || !preg_match($nameRegex, $lastName)) {
-        http_response_code(400);
-        echo json_encode(['message' => 'Le nom et le prénom doivent contenir au moins 3 lettres.']);
-        exit();
-    }
-
-    // Hash du mot de passe
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+    // Assigner les données à des variables locales
+    $firstname = $data->firstName;
+    $lastname = $data->lastName;
+    $email = $data->email;
+    $tel = $data->tel;
+    $allergies = $data->allergies;
+    $password = hashPassword($data->password); // Utilisation de la fonction hashPassword pour hacher le mot de passe
+    $role = 'client'; // Définir le rôle par défaut à "client"
 
     // Insérer l'utilisateur dans la base de données
     try {
-        $stmt = $pdo->prepare("INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)");
-        $stmt->execute([$email, $hashedPassword, $firstName, $lastName]);
+        $stmt = $pdo->prepare("INSERT INTO users (email, password, first_name, last_name, tel, allergies, role) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$email, $password, $firstname, $lastname, $tel, $allergies, $role]);
 
+        // Répondre avec un code de succès et un message JSON
         http_response_code(201);
         echo json_encode(['message' => 'Inscription réussie.']);
     } catch (PDOException $e) {
+        // En cas d'erreur de base de données, répondre avec un code d'erreur et un message JSON
         http_response_code(500);
-        echo json_encode(['message' => 'Erreur de base de données.']);
+        echo json_encode(['message' => 'Erreur de base de données: ' . $e->getMessage()]);
     }
 } else {
-    http_response_code(405); // Méthode non autorisée
+    // Répondre avec un code d'erreur si la méthode n'est pas autorisée
+    http_response_code(405);
     echo json_encode(['message' => 'Méthode non autorisée.']);
+}
+function hashPassword($password) {
+    return password_hash($password, PASSWORD_DEFAULT);
 }
 ?>
