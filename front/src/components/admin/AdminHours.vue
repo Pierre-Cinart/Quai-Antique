@@ -63,11 +63,19 @@ export default {
       return formattedSchedules;
     },
     formatTime(time) {
-      if (!time) return ''; // Gérer le cas où le temps est null
-      const hour = String(time).slice(0, 2); // Prendre les deux premiers chiffres pour les heures
-      const minute = String(time).slice(2); // Prendre les deux derniers chiffres pour les minutes
-      return `${hour}:${minute}`;
-    },
+  if (time === null || time === undefined) return ''; // Gérer le cas où le temps est null ou undefined
+
+  let formattedTime = String(time);
+  if (formattedTime.length < 4) {
+    // Ajouter des zéros avant si le nombre comporte moins de 4 chiffres
+    formattedTime = formattedTime.padStart(4, '0');
+  }
+  const hour = formattedTime.slice(0, 2); // Prendre les deux premiers chiffres pour les heures
+  const minute = formattedTime.slice(2); // Prendre les deux derniers chiffres pour les minutes
+  return `${hour}:${minute}`;
+},
+
+
     getDay(day) {
       switch (day) {
         case 'week':
