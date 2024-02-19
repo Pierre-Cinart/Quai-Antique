@@ -24,6 +24,11 @@ const routes = [
     name: 'MenuPage',
     component: () => import(/* webpackChunkName: "MenuPage" */ '../views/MenuPage.vue'),
   },
+  {
+    path: '/session_end',
+    name: 'SessionExpired',
+    component: () => import(/* webpackChunkName: "SessionExpired" */ '../views/SessionExpired.vue'),
+  },
   //admin
   {
     path: '/dashboard',
