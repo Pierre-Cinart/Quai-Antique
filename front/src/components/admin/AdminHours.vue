@@ -1,30 +1,115 @@
-
-<template >
-  <!--Gestion admin images page d 'acceuil-->
-  <h2>Modifier les horraires</h2>
-  <section class="admin-hours">
- 
-  </section>
+<template>
+  <!-- Gestion admin des horaires -->
+  <div>
+    <h2>Modifier les horaires</h2>
+    <br>
+    <section class="admin-hours">
+      <div v-for="(schedule, index) in schedules" :key="index" class="schedule-item">
+        <label class="days">{{ getDay(schedule.day) }}</label>
+        <div>
+          <label>Ouverture (matin):</label>
+          <input type="time" v-model="schedule.morning_start" />
+        </div>
+        <div>
+          <label>Fermeture (matin):</label>
+          <input type="time" v-model="schedule.morning_end" />
+        </div>
+        <div>
+          <label>Ouverture (après-midi):</label>
+          <input type="time" v-model="schedule.after_start" />
+        </div>
+        <div>
+          <label>Fermeture (après-midi):</label>
+          <input type="time" v-model="schedule.after_end" />
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
+
 <script>
-export default{
-  name : 'AdminHours'
-}
+import axios from 'axios';
+
+export default {
+  name: 'AdminHours',
+  data() {
+    return {
+      schedules: [],
+    };
+  },
+  mounted() {
+    this.fetchSchedules();
+  },
+  methods: {
+    async fetchSchedules() {
+      try {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/opening_hours.php`);
+        this.schedules = this.formatSchedules(response.data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des horaires :", error);
+      }
+    },
+    formatSchedules(data) {
+      const formattedSchedules = {};
+      for (const [key, value] of Object.entries(data)) {
+        formattedSchedules[key] = {
+          ...value,
+          morning_start: this.formatTime(value.morning_start),
+          morning_end: this.formatTime(value.morning_end),
+          after_start: this.formatTime(value.after_start),
+          after_end: this.formatTime(value.after_end)
+        };
+      }
+      return formattedSchedules;
+    },
+    formatTime(time) {
+      if (!time) return ''; // Gérer le cas où le temps est null
+      const hour = String(time).slice(0, 2); // Prendre les deux premiers chiffres pour les heures
+      const minute = String(time).slice(2); // Prendre les deux derniers chiffres pour les minutes
+      return `${hour}:${minute}`;
+    },
+    getDay(day) {
+      switch (day) {
+        case 'week':
+          return 'Du lundi au vendredi :';
+        case 'saturday':
+          return 'Samedi :';
+        case 'sunday':
+          return 'Dimanche et jours fériés : ';
+        // Ajoutez d'autres cas pour les jours fériés si nécessaire
+        default:
+          return day;
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
-section , h2 {
-  margin:auto;
-}
-h2{
-  text-decoration :underline;
-}
 .admin-hours {
   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-img {
-  width: 100px;
-  margin:5px;
-  border: solid 1px black;
+
+.schedule-item {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+input {
+  margin-bottom: 5px;
+}
+
+h2 {
+  text-decoration: underline;
+  margin: auto;
+  text-align: center;
+}
+.days {
+  font-weight: bolder;
 }
 </style>
