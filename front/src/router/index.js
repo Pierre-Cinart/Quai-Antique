@@ -25,6 +25,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "MenuPage" */ '../views/MenuPage.vue'),
   },
   {
+    path: '/profil',
+    name: 'ProfilPage',
+    component: () => import(/* webpackChunkName: "ProfilPage" */ '../views/ProfilPage.vue'),
+  },
+  {
     path: '/session_end',
     name: 'SessionExpired',
     component: () => import(/* webpackChunkName: "SessionExpired" */ '../views/SessionExpired.vue'),

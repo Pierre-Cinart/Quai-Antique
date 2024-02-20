@@ -6,6 +6,7 @@ CREATE TABLE  users (
     tel INT(10) ,
     allergies VARCHAR(255),
     number_of_guests INT(2) ,
+    picture VARCHAR(255),
     jwt VARCHAR(255),
     role ENUM('admin', 'client','super admin') DEFAULT 'client' NOT NULL,
     first_name VARCHAR(50) NOT NULL,

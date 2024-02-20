@@ -31,7 +31,6 @@
             <li class="nav-item">
               <router-link to="/reservation" class="nav-link" style="font-weight: bolder;">Réserver Une Table</router-link>
             </li>
-            <!-- Lien dynamique en fonction de la connexion de l'utilisateur -->
             <li v-if="isLoggedIn" class="nav-item">
               <!-- Si l'utilisateur est connecté, affiche un bouton pour se déconnecter -->
               <router-link to="/" class="nav-link" @click="logoutAndRefresh">Se déconnecter</router-link>
@@ -39,6 +38,27 @@
             <li v-else class="nav-item">
               <!-- Si l'utilisateur n'est pas connecté, affiche le lien vers la page de connexion -->
               <router-link to="/authentification" class="nav-link">Se connecter</router-link>
+            </li>
+            <li v-if="!isLoggedIn" class="nav-item">
+              <!-- Si l'utilisateur n'est pas connecté, désactive le lien vers la page de profil -->
+              <router-link to="/profil" class="nav-link profile-link" style="pointer-events: none;">
+                <i class="fas fa-user" style="color: #ccc;"></i>
+              </router-link>
+            </li>
+            <li v-else class="nav-item">
+              <!-- Lien vers la page de profil -->
+              <router-link to="/profil" class="nav-link profile-link" :style="{ color: isLoggedIn ? '#00FF00' : '#ccc' }" v-bind:disabled="!isLoggedIn">
+                <i class="fas fa-user"></i>
+              </router-link>
+            </li>
+            <li v-if="isAdmin" class="nav-item" >
+              <!-- Si l'utilisateur n'est pas connecté, désactive le lien vers la page de profil -->
+              <router-link to="/dashboard" class="nav-link profile-link" >
+                Dashboard
+              </router-link>
+            </li>
+            <li v-else>
+              
             </li>
           </ul>
         </div>
@@ -56,12 +76,21 @@ export default {
       navbarOpen: false
     };
   },
+
   computed: {
     isLoggedIn() {
       return this.$store.getters.getUserRole !== null;
-    }
+    },
+    isAdmin() {
+      
+      return this.$store.getters.isAdmin == true;
+    
+    
+  }
   },
+ 
   methods: {
+    
     toggleNavbar() {
       this.navbarOpen = !this.navbarOpen;
     },
@@ -74,6 +103,7 @@ export default {
       // Déconnexion de l'utilisateur
       this.$store.commit('resetUserData');
       // Rediriger vers la page d'accueil
+      console.log (localStorage)
       router.push('/');
     },
     restoreUserFromLocalStorage() {
@@ -86,6 +116,9 @@ export default {
   mounted() {
     // Restaurer les données de l'utilisateur depuis le localStorage lors du montage du composant
     this.restoreUserFromLocalStorage();
+   
+  
+    
   }
 };
 </script>
@@ -97,11 +130,6 @@ header {
   font-family: 'Dancing Script', cursive;
   user-select: none;
   border: solid 2px #523e15;
-}
-.navBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* Centrer verticalement les éléments */
 }
 img {
   width: 80px;
@@ -121,7 +149,7 @@ img {
     width: 100%;
   }
 }
-/* Style personnalisé pour le fond de la navbar */
+
 .bg-custom {
   background-color: #ddae48b9; 
 }

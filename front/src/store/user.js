@@ -7,6 +7,15 @@ export default {
   getters: {
     getUserRole: state => {
       return state.userData ? state.userData.role : null;
+    },
+    isAdmin : state => {
+      if (state.userData &&  (state.userData.role == '555' || state.userData.role == '745')){
+  
+        return true;
+      }
+      else {
+        return false;
+      }
     }
   },
   mutations: {
