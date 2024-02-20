@@ -4,6 +4,11 @@ function formatTime($time) {
     return substr_replace($time, ':', -2, 0);
 }
 
+// Fonction pour formater l'heure de réservation en HH:MM
+function formatReservTime($time) {
+    return substr($time, 0, 5); // Récupère les 5 premiers caractères (HH:MM)
+}
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -84,9 +89,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 
             // Mettre à jour les places disponibles en fonction des réservations existantes
             foreach ($reservations as $reservation) {
-                $reservationTime = formatTime($reservation['reservation_time']);
+                $reservationTime = formatReservTime($reservation['reservation_time']);
                 if (array_key_exists($reservationTime, $timeSlots)) {
+                    // Si la tranche horaire existe dans $timeSlots, réduire le nombre de places disponibles
+                    // en soustrayant le nombre de personnes de la réservation
                     $timeSlots[$reservationTime] -= $reservation['number_of_guests'];
+                    // Vérifier si le nombre de places disponibles est inférieur à zéro
+                    // et le mettre à zéro pour éviter les valeurs négatives
+                    if ($timeSlots[$reservationTime] < 0) {
+                        $timeSlots[$reservationTime] = 0;
+                    }
                 }
             }
 
