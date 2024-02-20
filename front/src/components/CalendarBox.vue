@@ -43,10 +43,39 @@
         </div>
       </div>
     </div>
- 
-   <!-- Affichage de la date sélectionnée -->
+
+    <!-- Affichage de la date sélectionnée -->
     <span class="selected-date">{{ formattedSelectedDate }}</span>
   </section>
+  <div id="reserv_hours_box" class="container" style="display: flex; flex-wrap: wrap;">
+  <template v-if="Object.keys(reservHours).length">
+    <div v-for="(group, index) in Object.keys(reservHours).reduce((acc, key, i) => (i % 5 === 0 ? acc.push([key]) : acc[acc.length - 1].push(key)) && acc, [])" :key="index" style="width: 20%; min-width: 150px; margin-bottom: 20px;">
+      <table>
+        <thead>
+          <tr>
+            <th colspan="2"></th>
+          </tr>
+          <tr>
+            <th>Heure</th>
+            <th>Places disponibles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="time in group" :key="time" @click="setHoursReserv(time)" style="cursor: pointer;">
+            <td>{{ time }}</td>
+            <td>{{ reservHours[time] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </template>
+  <div v-else>
+    Aucun horaire disponible.
+  </div>
+</div>
+
+
+   
   
      <!-- Section du formulaire de réservation -->
   <section class="my-form container">
@@ -102,6 +131,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'CalendarBox',
   data() {
@@ -124,7 +154,8 @@ export default {
         tel: '',
         couverts: '',
         allergies: ''
-      }
+      },
+      reservHours: [],
     };
   },
   computed: {
@@ -138,6 +169,7 @@ export default {
     // Formatage de la date sélectionnée pour le input type date
     selectedDateFormatted() {
       if (this.selectedDate) {
+        
         const year = this.selectedDate.getFullYear();
         const month = `${this.selectedDate.getMonth() + 1}`.padStart(2, '0');
         const day = `${this.selectedDate.getDate()}`.padStart(2, '0');
@@ -194,6 +226,8 @@ export default {
     selectDate(date) {
       if (date.date && !this.isDateDisabled(date)) {
         this.selectedDate = date.date;
+        console.log('selected',this.selectedDate);
+        this.getSelectedDate();
       }
     },
     // Vérifier si une date est désactivée
@@ -217,8 +251,46 @@ export default {
       if (nextMonth <= sixMonthsLater) {
         this.updateCalendar(nextMonth);
       }
+    },
+    // Fonction pour récupérer et formater la date sélectionnée
+    getSelectedDate() {
+      // Vérifiez d'abord si une date est sélectionnée
+      if (this.selectedDate) {
+      // Formatez la date sélectionnée au bon format pour l'envoyer en GET
+      const selectedDate = this.selectedDate;
+      const formattedDate = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
+      console.log('format',formattedDate)
+      // Faites une requête GET pour obtenir les horaires de réservation pour la date sélectionnée
+      axios.get(`http://localhost/Quai-Antique/back/api/get_reserv_hours.php?date=${formattedDate}`)
+      .then(response => {
+        // Mettez à jour le tableau des horaires de réservation avec les données reçues
+        this.reservHours = response.data;
+        Object.keys(this.reservHours).forEach(time => {
+        const places = this.reservHours[time];
+        console.log('Heure :', time, ', Places disponibles :', places);
+      });
+    })
+      .catch(error => {
+        console.error('Erreur lors de la récupération des horaires de réservation :', error);
+        this.reservHours = []; // Réinitialisez le tableau des horaires s'il y a une erreur
+      });
+    } else {
+    console.error('Aucune date sélectionnée.');
+    this.reservHours = []; // Réinitialisez le tableau des horaires si aucune date n'est sélectionnée
     }
+  },
+
+    // Fonction pour sélectionner un horaire de réservation
+    selectReservationTime(time) {
+      // Vous pouvez ajouter ici le code pour traiter la sélection d'un horaire de réservation
+      console.log('Horaire de réservation sélectionné :', time);
+    },
+    setHoursReserv(time){
+    console.log('Horaire de réservation :' ,time);
   }
+  },
+ 
+  
 };
 </script>
 
@@ -325,5 +397,21 @@ export default {
 }
 }
 
-
+table {
+  background-color: #ccc;
+  color: #333;
+  
+}
+th,tr,td{
+  padding:10px;
+  font-size: 16px;
+  text-align: center;
+  border: solid 1px green;
+  border-radius: 5%;
+  font-weight: 600;
+}
+td:hover{
+  cursor: pointer;
+  
+}
 </style>

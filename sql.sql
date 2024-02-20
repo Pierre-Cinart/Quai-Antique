@@ -5,12 +5,14 @@ CREATE TABLE  users (
     password VARCHAR(255) NOT NULL,
     tel INT(10) ,
     allergies VARCHAR(255),
+    number_of_guests INT(2) ,
     jwt VARCHAR(255),
     role ENUM('admin', 'client','super admin') DEFAULT 'client' NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CHECK (number_of_guests >= 1 AND number_of_guests <= 15)
 );
 
 -- Création de la table des informations des clients
@@ -55,7 +57,8 @@ CREATE TABLE reservations (
     reservation_date DATE NOT NULL,
     reservation_time TIME NOT NULL,
     allergies TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CHECK (number_of_guests >= 1 AND number_of_guests <= 15)
 );
 
 
@@ -69,7 +72,7 @@ CREATE TABLE  logs (
 );
 
 --Création de la table des horraires
-CREATE TABLE  open (
+CREATE TABLE   open (
     id INT AUTO_INCREMENT PRIMARY KEY,
     day VARCHAR(20),
     morning_start INT,
@@ -79,7 +82,7 @@ CREATE TABLE  open (
 );
 
 -- Création de la table home_pictures
-CREATE TABLE IF NOT EXISTS home_pictures (
+CREATE TABLE  home_pictures (
     id INT AUTO_INCREMENT PRIMARY KEY,
     dish_id INT,
     FOREIGN KEY (dish_id) REFERENCES dishes(dish_id)
@@ -137,3 +140,6 @@ INSERT INTO dishes (title, description, price, category_id, picture) VALUES
     ('Gâteau de Savoie', 'Un gâteau moelleux et léger à base de farine, de sucre, de beurre et d\'oeufs, parfumé à la vanille, une spécialité sucrée savoyarde.', 5.00, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert3.jpg'), 
     ('Sablés de Chartreuse', 'Des sablés fondants et parfumés à la Chartreuse, une liqueur emblématique de la région savoyarde, parfaits pour accompagner un café.', 4.50, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert4.jpg'), 
     ('Tourte aux Noix', 'Une tourte croustillante et savoureuse, garnie de cerneaux de noix, de miel des montagnes et d\'une touche de rhum, une spécialité sucrée typique de la Savoie.', 7.00, (SELECT category_id FROM categories WHERE title = 'Dessert'), 'dessert5.jpg');
+--creation exemple de reservation
+INSERT INTO reservations (first_name, last_name, email, tel, number_of_guests, reservation_date, reservation_time)
+VALUES ('Pierre', 'Dupont', NULL, '0320240049', 3, '2024-02-20', '12:00');
