@@ -122,4 +122,15 @@ img:hover {
   opacity: 0.8;
   cursor: pointer;
 }
+
+.carousel-item-content {
+  height: 300px; /* fixe le cadre */
+  overflow: hidden;
+}
+
+.carousel-item-content img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
 </style>
